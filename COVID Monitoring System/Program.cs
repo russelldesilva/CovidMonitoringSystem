@@ -11,7 +11,7 @@ namespace COVID_Monitoring_System
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("AYKEN IS NOT A nice ,BITCH");
+            Console.WriteLine("AYKEN pls dont screw this up");
         }
     }
 }
