@@ -12,7 +12,6 @@ namespace COVID_Monitoring_System
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            Console.Write("Gsrgawha");
         }
     }
 }
