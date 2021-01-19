@@ -73,10 +73,14 @@ namespace COVID_Monitoring_System
             DistFromLandCheckpoint = l;
         }
         
-        /*public double CalculateTravelCost()
+        public double[] CalculateTravelCost()
         {
-            
-        }*/
+            double AirCost = 50 * DistFromAirCheckpoint * 0.22;
+            double SeaCost = 50 * DistFromSeaCheckpoint * 0.22;
+            double LandCost = 50 * DistFromLandCheckpoint * 0.22;
+            double[] costArray = { AirCost, SeaCost, LandCost };
+            return costArray;
+        }
 
         public bool IsAvailable()
         {

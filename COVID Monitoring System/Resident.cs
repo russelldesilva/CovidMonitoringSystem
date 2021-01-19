@@ -10,7 +10,38 @@ using System.Text;
 
 namespace COVID_Monitoring_System
 {
-    class Resident
+    class Resident : Person
     {
+        private string address;
+
+        public string Address
+        {
+            get { return address; }
+            set { address = value; }
+        }
+
+        private DateTime lastLeftCountry;
+
+        public DateTime LastLeftCountry
+        {
+            get { return lastLeftCountry; }
+            set { lastLeftCountry = value; }
+        }
+
+        private TraceTogetherToken token;
+
+        public TraceTogetherToken Token
+        {
+            get { return token; }
+            set { token = value; }
+        }
+
+
+        public Resident() { }
+
+        public Resident(string n, string a, DateTime l) : base(Name)
+        {
+
+        }
     }
 }
