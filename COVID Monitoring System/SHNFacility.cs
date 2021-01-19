@@ -73,7 +73,10 @@ namespace COVID_Monitoring_System
             DistFromLandCheckpoint = l;
         }
         
-        //CalculateTravelCost
+        /*public double CalculateTravelCost()
+        {
+            
+        }*/
 
         public bool IsAvailable()
         {

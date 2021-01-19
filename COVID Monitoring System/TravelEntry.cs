@@ -77,7 +77,23 @@ namespace COVID_Monitoring_System
         { 
             SHNStay = s;
         }
-        //Calculate SHNDuration
+        public void CalculateSHNDuration()
+        {
+            int duration;
+            if (LastCountryOfEmbarkation == "New Zealand" || LastCountryOfEmbarkation == "Vietnam")
+            {
+                duration = 0;
+            }
+            else if (LastCountryOfEmbarkation == "Macao SAR")
+            {
+                duration = 7;
+            }
+            else
+            {
+                duration = 14;
+            }
+            SHNEndDate = EntryDate.AddDays(duration);
+        }
         public override string ToString()
         {
             return "Last Country of Embarkation: " + LastCountryOfEmbarkation + "\tEntry mode: " + EntryMode + "\tEntry Date: " + EntryDate + "" +
