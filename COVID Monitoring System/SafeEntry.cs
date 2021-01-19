@@ -48,11 +48,13 @@ namespace COVID_Monitoring_System
 		public void performCheckOut()
 		{
 			checkOut = DateTime.Now;
+			location.VisitorsNow -= 1;
 		}
 
-		public string ToString()
+		public override string ToString()
 		{
-			return ""
+			return "Check In Date and Time: " + checkIn + "Check Out Date and Time: " + checkOut + "Current Location: " + location;
+
 		}
 
 
