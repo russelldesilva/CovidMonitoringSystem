@@ -12,5 +12,51 @@ namespace COVID_Monitoring_System
 {
     class SafeEntry
     {
-    }
+		private DateTime checkIn;
+
+		public DateTime CheckIn
+		{
+			get { return checkIn; }
+			set { checkIn = value; }
+		}
+
+		private DateTime checkOut;
+
+		public DateTime CheckOut
+		{
+			get { return checkOut; }
+			set { checkOut = value; }
+		}
+
+		private BusinessLocation location;
+
+		public BusinessLocation Location 
+		{
+			get { return location; }
+			set { location = value; }
+		}
+
+
+		public SafeEntry () { }
+
+		public SafeEntry(DateTime checkIn, BusinessLocation location)
+		{
+			this.checkIn = checkIn;
+			this.location = location;
+		}
+
+		public void performCheckOut()
+		{
+			checkOut = DateTime.Now;
+		}
+
+		public string ToString()
+		{
+			return ""
+		}
+
+
+
+
+	}
 }
