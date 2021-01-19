@@ -48,7 +48,26 @@ namespace COVID_Monitoring_System
 
         public override double CalculateSHNCharges()
         {
-            
+            double swabTest = 200;
+            double transportation = 0;
+            double SDF = 0;
+            foreach (TravelEntry t in TravelEntryList)
+            {
+                if ((t.SHNEndDate.CompareTo(DateTime.Now) >= 0) && (!t.IsPaid))
+                {
+                    if ((t.SHNEndDate - t.EntryDate).Days == 7)
+                    {
+                        transportation = 20;
+                    }
+                    else if ((t.SHNEndDate - t.EntryDate).Days == 14)
+                    {
+                        transportation = 20;
+                        SDF = 1000;
+                    }
+                }
+            }
+            double totalCost = swabTest + transportation + SDF;
+            return totalCost;
         }
 
         public override string ToString()

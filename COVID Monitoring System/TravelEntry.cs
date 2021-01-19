@@ -68,7 +68,7 @@ namespace COVID_Monitoring_System
             LastCountryOfEmbarkation = l;
             EntryMode = m;
             EntryDate = entry;
-            SHNEndDate = new DateTime();
+            SHNEndDate = entry;
             SHNStay = new SHNFacility();
             IsPaid = false;
         }
