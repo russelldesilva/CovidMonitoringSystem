@@ -39,9 +39,21 @@ namespace COVID_Monitoring_System
 
         public Resident() { }
 
-        public Resident(string n, string a, DateTime l) : base(Name)
+        public Resident(string name, string a, DateTime l) : base(name)
         {
+            Address = a;
+            LastLeftCountry = l;
+            Token = new TraceTogetherToken();
+        }
 
+        public override double CalculateSHNCharges()
+        {
+            
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + "\tAddress: " + Address + "\tLast left country on: " + LastLeftCountry + Token.ToString();
         }
     }
 }
