@@ -72,9 +72,5 @@ namespace COVID_Monitoring_System
 			return "Business Name: " + businessName + "Branch Code: " + branchCode + "Max Capacity: " + maximumCapacity + "Current number of visitors: " + visitorsNow;
 
 		}
-
-
-
-
 	}
 }

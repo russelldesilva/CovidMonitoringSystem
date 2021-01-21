@@ -56,9 +56,5 @@ namespace COVID_Monitoring_System
 			return "Check In Date and Time: " + checkIn + "Check Out Date and Time: " + checkOut + "Current Location: " + location;
 
 		}
-
-
-
-
 	}
 }
