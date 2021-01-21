@@ -29,9 +29,9 @@ namespace COVID_Monitoring_System
             }
             return DataList;
         }
-
-        static void SHNAPI(List<SHNFacility> SHNList)
+        static List<SHNFacility> SHNAPI()
         {
+            List <SHNFacility> SHNList = new List<SHNFacility>();
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://covidmonitoringapiprg2.azurewebsites.net");
@@ -44,11 +44,16 @@ namespace COVID_Monitoring_System
                     readTask.Wait();
                     string data = readTask.Result;
                     SHNList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
-                    foreach (SHNFacility s in SHNList)
-                    {
-                        Console.WriteLine(s.ToString());
-                    }
                 }
+            }
+            return SHNList;
+        }
+        static void DisplaySHNFacilities(List<SHNFacility> SHNList)
+        {
+            Console.WriteLine("{0,-15}{1,10}{2,30}{3,30}{4,30}", "Name", "Capacity", "Dist from Air checkpoint", "Dist from Sea checkpoint", "Dist from Land checkpoint");
+            foreach (SHNFacility s in SHNList)
+            {
+                Console.WriteLine("{0,-15}{1,10}{2,30}{3,30}{4,30}", s.FacilityName, s.FacilityCapacity, s.DistFromAirCheckpoint, s.DistFromSeaCheckpoint, s.DistFromLandCheckpoint);
             }
         }
         static void Main(string[] args)
@@ -77,8 +82,8 @@ namespace COVID_Monitoring_System
                 Console.WriteLine(bizLocation.ToString());
                 bizList.Add(bizLocation);
             }
-            List<SHNFacility> SHNList = new List<SHNFacility>();
-            SHNAPI(SHNList);
+            List<SHNFacility> SHNList = SHNAPI();
+            DisplaySHNFacilities(SHNList);
         }
     }
 }
