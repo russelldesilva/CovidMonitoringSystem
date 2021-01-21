@@ -114,6 +114,29 @@ namespace COVID_Monitoring_System
                 }
             }
         }
+        //Basic feature 13
+        static void CalculateSHNCharges(List<Person> personList)
+        {
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name == name)
+                {
+                    foreach (TravelEntry t in p.TravelEntryList)
+                    {
+                        if ((t.SHNEndDate.CompareTo(DateTime.Now) >= 0) && (!t.IsPaid))
+                        {
+                            double SHNcharge = p.CalculateSHNCharges() * 1.07;
+                            Console.WriteLine("Total Charge: ${0}", SHNcharge.ToString("0.00"));
+                            t.IsPaid = true;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
         static void Main(string[] args)
         {
             List<Person> personList = new List<Person>();
@@ -123,26 +146,24 @@ namespace COVID_Monitoring_System
                 if (data[0] == "resident") 
                 {
                     Resident resident = new Resident(data[1], data[2], Convert.ToDateTime(data[3])); //create new Resident object from string[]
-                    Console.WriteLine(resident.ToString());
                     personList.Add(resident); //Populate list
                 }
                 else if (data[0] == "visitor")
                 {
                     Visitor visitor = new Visitor(data[1], data[4], data[5]); //create new Visitor object from string[]
-                    Console.WriteLine(visitor.ToString());
                     personList.Add(visitor); //Populate list
                 }
             }
             foreach (string[] data in FiletoList("BusinessLocation.csv")) //convert BusinessLocation.csv into list of string[] and process each item
             {
                 BusinessLocation bizLocation = new BusinessLocation(data[0], data[1], Convert.ToInt32(data[2])); //create new BusinessLocation object from string[]
-                Console.WriteLine(bizLocation.ToString());
                 bizList.Add(bizLocation); //Populate list
             }
             List<SHNFacility> SHNList = SHNAPI();
             DisplaySHNFacilities(SHNList);
             CreateVisitor(personList);
             NewTravelEntry(personList, SHNList);
+            CalculateSHNCharges(personList);
         }
     }
 }

@@ -61,6 +61,7 @@ namespace COVID_Monitoring_System
         {
             SerialNo = sn;
             CollectionLocation = cl;
+            ExpiryDate = DateTime.Now.AddMonths(6);
         }
 
         public override string ToString()
