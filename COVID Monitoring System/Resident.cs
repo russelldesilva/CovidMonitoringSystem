@@ -55,11 +55,11 @@ namespace COVID_Monitoring_System
             {
                 if ((t.SHNEndDate.CompareTo(DateTime.Now) >= 0) && (!t.IsPaid))
                 {
-                    if ((t.SHNEndDate - t.EntryDate).Days == 7)
+                    if ((t.SHNEndDate - t.EntryDate).Days+1 == 7)
                     {
                         transportation = 20;
                     }
-                    else if ((t.SHNEndDate - t.EntryDate).Days == 14)
+                    else if ((t.SHNEndDate - t.EntryDate).Days+1 == 14)
                     {
                         transportation = 20;
                         SDF = 1000;

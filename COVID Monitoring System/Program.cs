@@ -60,7 +60,7 @@ namespace COVID_Monitoring_System
             }
         }
         //Basic Feature 11
-        static void CreateVisitor(List<Visitor> visList)
+        static void CreateVisitor(List<Person> personList) //Create a new visitor object based on user inputs
         {
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
@@ -69,13 +69,54 @@ namespace COVID_Monitoring_System
             Console.Write("Enter nationality: ");
             string nationality = Console.ReadLine();
             Visitor newVisitor = new Visitor(name, passNo, nationality);
-            visList.Add(newVisitor);
+            personList.Add(newVisitor);
             Console.WriteLine("New visitor created.");
+        }
+        //Basic Feature 12
+        static void NewTravelEntry(List<Person> personList, List<SHNFacility>SHNList)
+        {
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name == name)
+                {
+                    Console.Write("Enter last country of embarkation: ");
+                    string lastCountry = Console.ReadLine();
+                    Console.Write("Enter mode of entry: ");
+                    string entryMode = Console.ReadLine();
+                    TravelEntry newEntry = new TravelEntry(lastCountry, entryMode, DateTime.Now);
+                    newEntry.CalculateSHNDuration();
+                    if ((newEntry.SHNEndDate - DateTime.Now).Days+1 == 14)
+                    {
+                        Console.WriteLine("You are required to do SHN at a SDF.\nPlease choose your preferred facility: ");
+                        DisplaySHNFacilities(SHNList);
+                        Console.Write("Enter name of facility: ");
+                        string SHNname = Console.ReadLine();
+                        foreach (SHNFacility s in SHNList)
+                        {
+                            if (s.FacilityName == SHNname)
+                            {
+                                if (s.IsAvailable())
+                                {
+                                    s.FacilityVacancy -= 1;
+                                    newEntry.AssignSHNFacility(s);
+                                }
+                            }
+                        }
+                    }
+                    else if ((newEntry.SHNEndDate - DateTime.Now).Days+1 == 7)
+                    {
+                        Console.WriteLine("You are required to do SHN at your own accomodation.");
+                    }
+                    p.AddTravelEntry(newEntry);
+                    Console.WriteLine("Travel entry added. Welcome to Singapore!");
+                }
+            }
         }
         static void Main(string[] args)
         {
-            List<Resident> resList = new List<Resident>();
-            List<Visitor> visList = new List<Visitor>();
+            List<Person> personList = new List<Person>();
             List<BusinessLocation> bizList = new List<BusinessLocation>();
             foreach (string[] data in FiletoList("Person.csv")) //convert Person.csv into list of string[] and process each item
             {
@@ -83,13 +124,13 @@ namespace COVID_Monitoring_System
                 {
                     Resident resident = new Resident(data[1], data[2], Convert.ToDateTime(data[3])); //create new Resident object from string[]
                     Console.WriteLine(resident.ToString());
-                    resList.Add(resident); //Populate list
+                    personList.Add(resident); //Populate list
                 }
                 else if (data[0] == "visitor")
                 {
                     Visitor visitor = new Visitor(data[1], data[4], data[5]); //create new Visitor object from string[]
                     Console.WriteLine(visitor.ToString());
-                    visList.Add(visitor); //Populate list
+                    personList.Add(visitor); //Populate list
                 }
             }
             foreach (string[] data in FiletoList("BusinessLocation.csv")) //convert BusinessLocation.csv into list of string[] and process each item
@@ -100,7 +141,8 @@ namespace COVID_Monitoring_System
             }
             List<SHNFacility> SHNList = SHNAPI();
             DisplaySHNFacilities(SHNList);
-            CreateVisitor(visList);
+            CreateVisitor(personList);
+            NewTravelEntry(personList, SHNList);
         }
     }
 }

@@ -97,7 +97,7 @@ namespace COVID_Monitoring_System
         public override string ToString()
         {
             return "Last Country of Embarkation: " + LastCountryOfEmbarkation + "\tEntry mode: " + EntryMode + "\tEntry Date: " + EntryDate + "" +
-                "\tSHN End Date: " + SHNEndDate + "\tSHN Facility: " + SHNStay + "\tPaid: " + IsPaid;
+                "\tSHN End Date: " + SHNEndDate + "\tSHN Facility: " + SHNStay.ToString() + "\tPaid: " + IsPaid;
         }
     }
 }
