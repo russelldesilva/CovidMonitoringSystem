@@ -160,10 +160,10 @@ namespace COVID_Monitoring_System
                 bizList.Add(bizLocation); //Populate list
             }
             List<SHNFacility> SHNList = SHNAPI();
-            DisplaySHNFacilities(SHNList);
+            /*DisplaySHNFacilities(SHNList);
             CreateVisitor(personList);
             NewTravelEntry(personList, SHNList);
-            CalculateSHNCharges(personList);
+            CalculateSHNCharges(personList);*/
         }
     }
 }
