@@ -6,6 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace COVID_Monitoring_System
 {
@@ -25,6 +28,28 @@ namespace COVID_Monitoring_System
                 }
             }
             return DataList;
+        }
+
+        static void SHNAPI(List<SHNFacility> SHNList)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://covidmonitoringapiprg2.azurewebsites.net");
+                Task<HttpResponseMessage> responseTask = client.GetAsync("/facility");
+                responseTask.Wait();
+                HttpResponseMessage result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    Task<string> readTask = result.Content.ReadAsStringAsync();
+                    readTask.Wait();
+                    string data = readTask.Result;
+                    SHNList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
+                    foreach (SHNFacility s in SHNList)
+                    {
+                        Console.WriteLine(s.ToString());
+                    }
+                }
+            }
         }
         static void Main(string[] args)
         {
@@ -52,6 +77,8 @@ namespace COVID_Monitoring_System
                 Console.WriteLine(bizLocation.ToString());
                 bizList.Add(bizLocation);
             }
+            List<SHNFacility> SHNList = new List<SHNFacility>();
+            SHNAPI(SHNList);
         }
     }
 }
