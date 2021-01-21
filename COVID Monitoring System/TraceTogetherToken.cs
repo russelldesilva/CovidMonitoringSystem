@@ -62,5 +62,10 @@ namespace COVID_Monitoring_System
             SerialNo = sn;
             CollectionLocation = cl;
         }
+
+        public override string ToString()
+        {
+            return "Serial Number: " + SerialNo + "\tCollection Location: " + CollectionLocation + "\tExpiry Date: " + ExpiryDate;
+        }
     }
 }

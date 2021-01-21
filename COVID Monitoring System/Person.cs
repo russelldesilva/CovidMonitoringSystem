@@ -41,6 +41,8 @@ namespace COVID_Monitoring_System
 		public Person(string name)
 		{
 			this.name = name;
+			SafeEntryList = new List<SafeEntry>();
+			TravelEntryList = new List<TravelEntry>();
 		}
 
 		public void AddTravelEntry(TravelEntry travelEntry)
