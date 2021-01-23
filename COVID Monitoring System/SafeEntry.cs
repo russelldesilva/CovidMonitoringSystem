@@ -42,6 +42,7 @@ namespace COVID_Monitoring_System
 		public SafeEntry(DateTime checkIn, BusinessLocation location)
 		{
 			this.checkIn = checkIn;
+			CheckOut = DateTime.MinValue;
 			this.location = location;
 		}
 
