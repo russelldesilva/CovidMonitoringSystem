@@ -69,7 +69,7 @@ namespace COVID_Monitoring_System
 
 		public override string ToString()
 		{
-			return "Business Name: " + businessName + "Branch Code: " + branchCode + "Max Capacity: " + maximumCapacity + "Current number of visitors: " + visitorsNow;
+			return "Business Name: " + businessName + "\tBranch Code: " + branchCode + "\tMax Capacity: " + maximumCapacity + "\tCurrent number of visitors: " + visitorsNow;
 
 		}
 	}

@@ -71,11 +71,5 @@ namespace COVID_Monitoring_System
 
 			return "";
 		}
-		
-
-		
-
-
-
 	}
 }

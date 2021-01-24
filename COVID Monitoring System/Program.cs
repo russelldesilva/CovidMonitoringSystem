@@ -14,6 +14,29 @@ namespace COVID_Monitoring_System
 {
     class Program
     {
+        static void DisplayMenu()
+        {
+            string[] menu = { 
+                "List all Visitors",
+                "List Person Details",
+                "Assign/Replace TraceTogether Token",
+                "List all Business Locations",
+                "Edit Business Location Capacity",
+                "SafeEntry Check-in",
+                "SafeEntry Check-out",
+                "List all SHN Facilities",
+                "Create new Visitor",
+                "Create Travel entry record",
+                "Calculate SHN charges"
+            };
+            Console.WriteLine("================ Menu ================");
+            for (int i = 0; i<menu.Length; i++)
+            {
+                Console.WriteLine("[" + (i+1) + "] " + menu[i]);
+            }
+            Console.WriteLine("[0] Quit the program");
+            Console.WriteLine("======================================");
+        }
         //Basic Feature 1
         static List<string[]> FiletoList(string path) //convert each line of file to string array; string path = name of file
         {
@@ -203,8 +226,6 @@ namespace COVID_Monitoring_System
                         if (checkOut == DateTime.MinValue)
                         {
                             Console.WriteLine(safeEntry.ToString());
-                            
-
                         }
 
                     }
@@ -347,16 +368,69 @@ namespace COVID_Monitoring_System
             /*DisplaySHNFacilities(SHNList);
             CreateVisitor(personList);
             NewTravelEntry(personList, SHNList);
-            CalculateSHNCharges(personList);*/
+            CalculateSHNCharges(personList);
             DisplayVisitors(visitorList);
             DisplayPersonDetails(personList);
             AssignToken(personList);
             DisplayBusinessLocation(bizList);
             EditBusinessLocation(bizList);
             checkIn(personList, bizList);
-            checkOut(personList);
+            checkOut(personList);*/
 
-
+            DisplayMenu();
+            Console.Write("\nEnter option: ");
+            int option = Convert.ToInt32(Console.ReadLine());
+            while (option != 0)
+            {
+                if (option == 1)
+                {
+                    DisplayVisitors(visitorList);
+                }
+                else if (option == 2)
+                {
+                    DisplayPersonDetails(personList);
+                }
+                else if (option == 3)
+                {
+                    AssignToken(personList);
+                }
+                else if (option == 4)
+                {
+                    DisplayBusinessLocation(bizList);
+                }
+                else if (option == 5)
+                {
+                    EditBusinessLocation(bizList);
+                }
+                else if (option == 6)
+                {
+                    checkIn(personList, bizList);
+                }
+                else if (option == 7)
+                {
+                    checkOut(personList);
+                }
+                else if (option == 8)
+                {
+                    DisplaySHNFacilities(SHNList);
+                }
+                else if (option == 9)
+                {
+                    CreateVisitor(personList);
+                }
+                else if (option == 10)
+                {
+                    NewTravelEntry(personList, SHNList);
+                }
+                else if (option == 11)
+                {
+                    CalculateSHNCharges(personList);
+                }
+                DisplayMenu();
+                Console.Write("\nEnter option: ");
+                option = Convert.ToInt32(Console.ReadLine());
+            }
+            Console.WriteLine("Bye!");
         }
     }
 }

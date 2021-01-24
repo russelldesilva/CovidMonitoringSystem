@@ -54,7 +54,7 @@ namespace COVID_Monitoring_System
 
 		public override string ToString()
 		{
-			return "Check In Date and Time: " + checkIn + "Check Out Date and Time: " + checkOut + "Current Location: " + location;
+			return "Check In Date and Time: " + checkIn + "\tCheck Out Date and Time: " + checkOut + "\tCurrent Location: " + location;
 
 		}
 	}
