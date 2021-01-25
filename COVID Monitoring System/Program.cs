@@ -202,7 +202,7 @@ namespace COVID_Monitoring_System
                         {
                             if (!location.IsFull())
                             {
-                                DateTime today = DateTime.Today;
+                                DateTime today = DateTime.Now;
                                 SafeEntry safeEntry = new SafeEntry(today, location);
                                 person.AddSafeEntry(safeEntry);
                                 location.VisitorsNow += 1;
@@ -345,8 +345,10 @@ namespace COVID_Monitoring_System
             Console.Write("Enter End Time: ");
             string endTime = Console.ReadLine();
             DateTime startDate = Convert.ToDateTime(date +  " " + startTime);
+            Console.WriteLine(startDate.ToString());
             DateTime endDate = Convert.ToDateTime(date +  " "  + endTime);
-            using (StreamWriter sw = new StreamWriter("ContactTracing.txt", false))
+            Console.WriteLine(endDate.ToString());
+            using (StreamWriter sw = new StreamWriter("ContactTracing.csv", false))
             {
                 foreach (Person person in personList)
                 {
@@ -356,11 +358,12 @@ namespace COVID_Monitoring_System
                         {
                             if (safeEntry.CheckIn < endDate && safeEntry.CheckIn > startDate || safeEntry.CheckOut < endDate && safeEntry.CheckOut > startDate)
                             {
-                                string[] contactTracingData = { person.Name, safeEntry.CheckIn.ToString(), safeEntry.CheckOut.ToString() };
+                                string[] contactTracingData = { person.Name, bizLocation, safeEntry.CheckIn.ToString(), safeEntry.CheckOut.ToString() };
 
                                 foreach (string s in contactTracingData)
                                 {
                                     sw.WriteLine(s);
+                                    Console.WriteLine(s);
                                 }
                             }
 
