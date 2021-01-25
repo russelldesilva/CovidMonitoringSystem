@@ -28,7 +28,8 @@ namespace COVID_Monitoring_System
                 "Create new Visitor",
                 "Create Travel entry record",
                 "Calculate SHN charges",
-                "Display Contact Tracing Report"
+                "Generate Contact Tracing Report",
+                "Generate SHN Status Report"
             };
             Console.WriteLine("================ Menu ================");
             for (int i = 0; i < menu.Length; i++)
@@ -103,7 +104,7 @@ namespace COVID_Monitoring_System
 
         }
         //Generate random and unique Serial Number for Token
-        static string generateSerialNo(List<Person> personList)
+        static string GenerateSerialNo(List<Person> personList)
         {
             string serialNo = "";
             while (true)
@@ -145,7 +146,7 @@ namespace COVID_Monitoring_System
                         Resident resident = (Resident)person;
                         if (resident.Token.SerialNo is null || today > resident.Token.ExpiryDate.AddMonths(-1))
                         {
-                            string serialNo = generateSerialNo(personList);
+                            string serialNo = GenerateSerialNo(personList);
                             resident.Token.SerialNo = serialNo;
                             resident.Token.CollectionLocation = "Kallang CC";
 
@@ -185,7 +186,7 @@ namespace COVID_Monitoring_System
 
         }
         //Basic Feature 8
-        static void checkIn(List<Person> personList, List<BusinessLocation> bizList)
+        static void CheckIn(List<Person> personList, List<BusinessLocation> bizList)
         {
             Console.WriteLine("Enter Name: ");
             string name = Console.ReadLine();
@@ -213,7 +214,7 @@ namespace COVID_Monitoring_System
             }
         }
         //Basic Feature 9
-        static void checkOut(List<Person> personList)
+        static void CheckOut(List<Person> personList)
         {
             Console.WriteLine("Enter Name: ");
             string name = Console.ReadLine();
@@ -346,7 +347,7 @@ namespace COVID_Monitoring_System
             string endTime = Console.ReadLine();
             DateTime startDate = Convert.ToDateTime(date +  " " + startTime);
             DateTime endDate = Convert.ToDateTime(date +  " "  + endTime);
-            using (StreamWriter sw = new StreamWriter("ContactTracing.txt", false))
+            using (StreamWriter sw = new StreamWriter("ContactTracing.csv", false))
             {
                 foreach (Person person in personList)
                 {
@@ -360,7 +361,7 @@ namespace COVID_Monitoring_System
 
                                 foreach (string s in contactTracingData)
                                 {
-                                    sw.WriteLine(s);
+                                    sw.Write(s);
                                 }
                             }
 
@@ -371,8 +372,28 @@ namespace COVID_Monitoring_System
             
         }
 
-
         //Advanced Feature 2
+        static void SHNStatusReport(List<Person> personList)
+        {
+            Console.Write("Enter date: ");
+            DateTime date = Convert.ToDateTime(Console.ReadLine());
+            using (StreamWriter sw = new StreamWriter("SHNStatus.csv", false))
+            foreach (Person p in personList)
+            {
+                foreach (TravelEntry t in p.TravelEntryList)
+                {
+                    if (t.SHNEndDate.CompareTo(date) >= 0)
+                    {
+                            string[] SHNStatusData = { p.Name, t.SHNStay.FacilityName, t.SHNEndDate.ToString() };
+                            foreach (string s in SHNStatusData)
+                            {
+                                sw.Write(s);
+                            }
+                    }
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             List<Person> personList = new List<Person>();
@@ -445,11 +466,11 @@ namespace COVID_Monitoring_System
                 }
                 else if (option == 6)
                 {
-                    checkIn(personList, bizList);
+                    CheckIn(personList, bizList);
                 }
                 else if (option == 7)
                 {
-                    checkOut(personList);
+                    CheckOut(personList);
                 }
                 else if (option == 8)
                 {
@@ -470,6 +491,10 @@ namespace COVID_Monitoring_System
                 else if (option == 12)
                 {
                     ContactTracingReport(personList);
+                }
+                else if (option == 13)
+                {
+                    SHNStatusReport(personList);
                 }
                 DisplayMenu();
                 Console.Write("\nEnter option: ");
