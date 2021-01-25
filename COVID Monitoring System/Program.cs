@@ -364,115 +364,114 @@ namespace COVID_Monitoring_System
                     }
                 }
             }
+            
+        }
 
 
-
-
-            //Advanced Feature 2
-            static void Main(string[] args)
+        //Advanced Feature 2
+        static void Main(string[] args)
+        {
+            List<Person> personList = new List<Person>();
+            List<Visitor> visitorList = new List<Visitor>();
+            List<BusinessLocation> bizList = new List<BusinessLocation>();
+            foreach (string[] data in FiletoList("Person.csv")) //convert Person.csv into list of string[] and process each item
             {
-                List<Person> personList = new List<Person>();
-                List<Visitor> visitorList = new List<Visitor>();
-                List<BusinessLocation> bizList = new List<BusinessLocation>();
-                foreach (string[] data in FiletoList("Person.csv")) //convert Person.csv into list of string[] and process each item
+
+                if (data[0] == "resident")
                 {
-
-                    if (data[0] == "resident")
+                    Resident resident = new Resident(data[1], data[2], Convert.ToDateTime(data[3])); //create new Resident object from string[]
+                    if (data[6] != "")
                     {
-                        Resident resident = new Resident(data[1], data[2], Convert.ToDateTime(data[3])); //create new Resident object from string[]
-                        if (data[6] != "")
-                        {
-                            resident.Token.SerialNo = data[6];
-                            resident.Token.CollectionLocation = data[7];
-                            resident.Token.ExpiryDate = Convert.ToDateTime(data[8]);
+                        resident.Token.SerialNo = data[6];
+                        resident.Token.CollectionLocation = data[7];
+                        resident.Token.ExpiryDate = Convert.ToDateTime(data[8]);
 
-                        }
-                        personList.Add(resident); //Populate list
                     }
-                    else if (data[0] == "visitor")
-                    {
-                        Visitor visitor = new Visitor(data[1], data[4], data[5]); //create new Visitor object from string[]
-                        personList.Add(visitor); //Populate list
-                        visitorList.Add(visitor);
-                    }
+                    personList.Add(resident); //Populate list
                 }
-                foreach (string[] data in FiletoList("BusinessLocation.csv")) //convert BusinessLocation.csv into list of string[] and process each item
+                else if (data[0] == "visitor")
                 {
-                    BusinessLocation bizLocation = new BusinessLocation(data[0], data[1], Convert.ToInt32(data[2])); //create new BusinessLocation object from string[]
-                    bizList.Add(bizLocation); //Populate list
+                    Visitor visitor = new Visitor(data[1], data[4], data[5]); //create new Visitor object from string[]
+                    personList.Add(visitor); //Populate list
+                    visitorList.Add(visitor);
                 }
-                List<SHNFacility> SHNList = SHNAPI();
-                /*DisplaySHNFacilities(SHNList);
-                CreateVisitor(personList);
-                NewTravelEntry(personList, SHNList);
-                CalculateSHNCharges(personList);
-                DisplayVisitors(visitorList);
-                DisplayPersonDetails(personList);
-                AssignToken(personList);
-                DisplayBusinessLocation(bizList);
-                EditBusinessLocation(bizList);
-                checkIn(personList, bizList);
-                checkOut(personList);*/
+            }
+            foreach (string[] data in FiletoList("BusinessLocation.csv")) //convert BusinessLocation.csv into list of string[] and process each item
+            {
+                BusinessLocation bizLocation = new BusinessLocation(data[0], data[1], Convert.ToInt32(data[2])); //create new BusinessLocation object from string[]
+                bizList.Add(bizLocation); //Populate list
+            }
+            List<SHNFacility> SHNList = SHNAPI();
+            /*DisplaySHNFacilities(SHNList);
+            CreateVisitor(personList);
+            NewTravelEntry(personList, SHNList);
+            CalculateSHNCharges(personList);
+            DisplayVisitors(visitorList);
+            DisplayPersonDetails(personList);
+            AssignToken(personList);
+            DisplayBusinessLocation(bizList);
+            EditBusinessLocation(bizList);
+            checkIn(personList, bizList);
+            checkOut(personList);*/
 
+            DisplayMenu();
+            Console.Write("\nEnter option: ");
+            int option = Convert.ToInt32(Console.ReadLine());
+            while (option != 0)
+            {
+                if (option == 1)
+                {
+                    DisplayVisitors(visitorList);
+                }
+                else if (option == 2)
+                {
+                    DisplayPersonDetails(personList);
+                }
+                else if (option == 3)
+                {
+                    AssignToken(personList);
+                }
+                else if (option == 4)
+                {
+                    DisplayBusinessLocation(bizList);
+                }
+                else if (option == 5)
+                {
+                    EditBusinessLocation(bizList);
+                }
+                else if (option == 6)
+                {
+                    checkIn(personList, bizList);
+                }
+                else if (option == 7)
+                {
+                    checkOut(personList);
+                }
+                else if (option == 8)
+                {
+                    DisplaySHNFacilities(SHNList);
+                }
+                else if (option == 9)
+                {
+                    CreateVisitor(personList);
+                }
+                else if (option == 10)
+                {
+                    NewTravelEntry(personList, SHNList);
+                }
+                else if (option == 11)
+                {
+                    CalculateSHNCharges(personList);
+                }
+                else if (option == 12)
+                {
+                    ContactTracingReport(personList);
+                }
                 DisplayMenu();
                 Console.Write("\nEnter option: ");
-                int option = Convert.ToInt32(Console.ReadLine());
-                while (option != 0)
-                {
-                    if (option == 1)
-                    {
-                        DisplayVisitors(visitorList);
-                    }
-                    else if (option == 2)
-                    {
-                        DisplayPersonDetails(personList);
-                    }
-                    else if (option == 3)
-                    {
-                        AssignToken(personList);
-                    }
-                    else if (option == 4)
-                    {
-                        DisplayBusinessLocation(bizList);
-                    }
-                    else if (option == 5)
-                    {
-                        EditBusinessLocation(bizList);
-                    }
-                    else if (option == 6)
-                    {
-                        checkIn(personList, bizList);
-                    }
-                    else if (option == 7)
-                    {
-                        checkOut(personList);
-                    }
-                    else if (option == 8)
-                    {
-                        DisplaySHNFacilities(SHNList);
-                    }
-                    else if (option == 9)
-                    {
-                        CreateVisitor(personList);
-                    }
-                    else if (option == 10)
-                    {
-                        NewTravelEntry(personList, SHNList);
-                    }
-                    else if (option == 11)
-                    {
-                        CalculateSHNCharges(personList);
-                    }
-                    else if (option == 12)
-                    {
-                        ContactTracingReport(personList);
-                    }
-                    DisplayMenu();
-                    Console.Write("\nEnter option: ");
-                    option = Convert.ToInt32(Console.ReadLine());
-                }
-                Console.WriteLine("Bye!");
+                option = Convert.ToInt32(Console.ReadLine());
             }
+            Console.WriteLine("Bye!");
         }
     }
 }
