@@ -345,10 +345,9 @@ namespace COVID_Monitoring_System
             string startTime = Console.ReadLine();
             Console.Write("Enter End Time: ");
             string endTime = Console.ReadLine();
-            DateTime startDate = Convert.ToDateTime(date +  " " + startTime);
-            Console.WriteLine(startDate.ToString());
+            DateTime startDate = Convert.ToDateTime(date + " " + startTime);
             DateTime endDate = Convert.ToDateTime(date +  " "  + endTime);
-            using (StreamWriter sw = new StreamWriter("ContactTracing.txt", false))
+            using (StreamWriter sw = new StreamWriter("ContactTracing.csv", false))
             {
                 foreach (Person person in personList)
                 {
@@ -359,11 +358,7 @@ namespace COVID_Monitoring_System
                             if (safeEntry.CheckIn < endDate && safeEntry.CheckIn > startDate || safeEntry.CheckOut < endDate && safeEntry.CheckOut > startDate)
                             {
                                 string[] contactTracingData = { person.Name, bizLocation, safeEntry.CheckIn.ToString(), safeEntry.CheckOut.ToString() };
-
-                                foreach (string s in contactTracingData)
-                                {
-                                    sw.WriteLine(s);
-                                }
+                                sw.WriteLine("{0},{1},{2},{3}", contactTracingData[0], contactTracingData[1], contactTracingData[2], contactTracingData[3]);
                             }
 
                         }
@@ -385,11 +380,8 @@ namespace COVID_Monitoring_System
                 {
                     if (t.SHNEndDate.CompareTo(date) >= 0)
                     {
-                            string[] SHNStatusData = { p.Name, t.SHNStay.FacilityName, t.SHNEndDate.ToString() };
-                            foreach (string s in SHNStatusData)
-                            {
-                                sw.Write(s);
-                            }
+                        string[] SHNStatusData = { p.Name, t.SHNStay.FacilityName, t.SHNEndDate.ToString() };
+                        sw.WriteLine("{0},{1},{2}", SHNStatusData[0], SHNStatusData[1], SHNStatusData[2]);
                     }
                 }
             }
