@@ -16,7 +16,7 @@ namespace COVID_Monitoring_System
     {
         static void DisplayMenu()
         {
-            string[] menu = { 
+            string[] menu = {
                 "List all Visitors",
                 "List Person Details",
                 "Assign/Replace TraceTogether Token",
@@ -27,12 +27,13 @@ namespace COVID_Monitoring_System
                 "List all SHN Facilities",
                 "Create new Visitor",
                 "Create Travel entry record",
-                "Calculate SHN charges"
+                "Calculate SHN charges",
+                "Display Contact Tracing Report"
             };
             Console.WriteLine("================ Menu ================");
-            for (int i = 0; i<menu.Length; i++)
+            for (int i = 0; i < menu.Length; i++)
             {
-                Console.WriteLine("[" + (i+1) + "] " + menu[i]);
+                Console.WriteLine("[" + (i + 1) + "] " + menu[i]);
             }
             Console.WriteLine("[0] Quit the program");
             Console.WriteLine("======================================");
@@ -113,7 +114,7 @@ namespace COVID_Monitoring_System
                 bool exist = false;
                 foreach (Person person in personList)
                 {
-                    if(person is Resident)
+                    if (person is Resident)
                     {
                         Resident resident = (Resident)person;
                         if (serialNo == resident.Token.SerialNo)
@@ -121,7 +122,7 @@ namespace COVID_Monitoring_System
                             exist = true;
                         }
                     }
-                    
+
                 }
                 if (!exist)
                     break;
@@ -137,7 +138,7 @@ namespace COVID_Monitoring_System
             {
                 if (name == person.Name)
                 {
-                    if(person is Resident)
+                    if (person is Resident)
 
                     {
                         DateTime today = DateTime.Today;
@@ -152,9 +153,9 @@ namespace COVID_Monitoring_System
 
                             resident.Token.ExpiryDate = today;
                         }
-                        
+
                     }
-                    
+
                 }
             }
         }
@@ -195,9 +196,9 @@ namespace COVID_Monitoring_System
                     DisplayBusinessLocation(bizList);
                     Console.WriteLine("Choose Business Location: ");
                     string locationName = Console.ReadLine();
-                    foreach(BusinessLocation location in bizList)
+                    foreach (BusinessLocation location in bizList)
                     {
-                        if(locationName == location.BusinessName)
+                        if (locationName == location.BusinessName)
                         {
                             if (!location.IsFull())
                             {
@@ -220,7 +221,7 @@ namespace COVID_Monitoring_System
             {
                 if (name == person.Name)
                 {
-                    foreach(SafeEntry safeEntry in person.SafeEntryList)
+                    foreach (SafeEntry safeEntry in person.SafeEntryList)
                     {
                         DateTime checkOut = safeEntry.CheckOut;
                         if (checkOut == DateTime.MinValue)
@@ -231,9 +232,9 @@ namespace COVID_Monitoring_System
                     }
                     Console.WriteLine("Select Location to check out: ");
                     string location = Console.ReadLine();
-                    foreach(SafeEntry safeEntry in person.SafeEntryList)
+                    foreach (SafeEntry safeEntry in person.SafeEntryList)
                     {
-                        if(location == safeEntry.Location.BusinessName)
+                        if (location == safeEntry.Location.BusinessName)
                         {
                             safeEntry.performCheckOut();
                         }
@@ -241,7 +242,7 @@ namespace COVID_Monitoring_System
                 }
             }
         }
-                   
+
 
 
 
@@ -332,105 +333,146 @@ namespace COVID_Monitoring_System
                 }
             }
         }
-        static void Main(string[] args)
+        //Advanced Feature 1
+        static void ContactTracingReport(List<Person> personList)
         {
-            List<Person> personList = new List<Person>();
-            List<Visitor> visitorList = new List<Visitor>();
-            List<BusinessLocation> bizList = new List<BusinessLocation>();
-            foreach (string[] data in FiletoList("Person.csv")) //convert Person.csv into list of string[] and process each item
+            Console.Write("Enter Buiness Location: ");
+            string bizLocation = Console.ReadLine();
+            Console.Write("Enter Start Time: ");
+            DateTime startTime = Convert.ToDateTime(Console.ReadLine());
+            Console.Write("Enter End Time: ");
+            DateTime endTime = Convert.ToDateTime(Console.ReadLine());
+            using (StreamWriter sw = new StreamWriter("ContactTracing.txt", false))
             {
-
-                if (data[0] == "resident")
+                foreach (Person person in personList)
                 {
-                    Resident resident = new Resident(data[1], data[2], Convert.ToDateTime(data[3])); //create new Resident object from string[]
-                    if (data[6] != "")
+                    foreach (SafeEntry safeEntry in person.SafeEntryList)
                     {
-                        resident.Token.SerialNo = data[6];
-                        resident.Token.CollectionLocation = data[7];
-                        resident.Token.ExpiryDate = Convert.ToDateTime(data[8]);
+                        if (safeEntry.Location.BusinessName == bizLocation)
+                        {
+                            if (safeEntry.CheckIn < endTime && safeEntry.CheckIn > startTime || safeEntry.CheckOut < endTime && safeEntry.CheckOut > startTime)
+                            {
+                                string[] contactTracingData = { person.Name, safeEntry.CheckIn.ToString(), safeEntry.CheckOut.ToString() };
 
+                                foreach (string s in contactTracingData)
+                                {
+                                    sw.WriteLine(s);
+                                }
+                            }
+
+                        }
                     }
-                    personList.Add(resident); //Populate list
-                }
-                else if (data[0] == "visitor")
-                {
-                    Visitor visitor = new Visitor(data[1], data[4], data[5]); //create new Visitor object from string[]
-                    personList.Add(visitor); //Populate list
-                    visitorList.Add(visitor);
                 }
             }
-            foreach (string[] data in FiletoList("BusinessLocation.csv")) //convert BusinessLocation.csv into list of string[] and process each item
-            {
-                BusinessLocation bizLocation = new BusinessLocation(data[0], data[1], Convert.ToInt32(data[2])); //create new BusinessLocation object from string[]
-                bizList.Add(bizLocation); //Populate list
-            }
-            List<SHNFacility> SHNList = SHNAPI();
-            /*DisplaySHNFacilities(SHNList);
-            CreateVisitor(personList);
-            NewTravelEntry(personList, SHNList);
-            CalculateSHNCharges(personList);
-            DisplayVisitors(visitorList);
-            DisplayPersonDetails(personList);
-            AssignToken(personList);
-            DisplayBusinessLocation(bizList);
-            EditBusinessLocation(bizList);
-            checkIn(personList, bizList);
-            checkOut(personList);*/
 
-            DisplayMenu();
-            Console.Write("\nEnter option: ");
-            int option = Convert.ToInt32(Console.ReadLine());
-            while (option != 0)
+
+
+
+            //Advanced Feature 2
+            static void Main(string[] args)
             {
-                if (option == 1)
+                List<Person> personList = new List<Person>();
+                List<Visitor> visitorList = new List<Visitor>();
+                List<BusinessLocation> bizList = new List<BusinessLocation>();
+                foreach (string[] data in FiletoList("Person.csv")) //convert Person.csv into list of string[] and process each item
                 {
-                    DisplayVisitors(visitorList);
+
+                    if (data[0] == "resident")
+                    {
+                        Resident resident = new Resident(data[1], data[2], Convert.ToDateTime(data[3])); //create new Resident object from string[]
+                        if (data[6] != "")
+                        {
+                            resident.Token.SerialNo = data[6];
+                            resident.Token.CollectionLocation = data[7];
+                            resident.Token.ExpiryDate = Convert.ToDateTime(data[8]);
+
+                        }
+                        personList.Add(resident); //Populate list
+                    }
+                    else if (data[0] == "visitor")
+                    {
+                        Visitor visitor = new Visitor(data[1], data[4], data[5]); //create new Visitor object from string[]
+                        personList.Add(visitor); //Populate list
+                        visitorList.Add(visitor);
+                    }
                 }
-                else if (option == 2)
+                foreach (string[] data in FiletoList("BusinessLocation.csv")) //convert BusinessLocation.csv into list of string[] and process each item
                 {
-                    DisplayPersonDetails(personList);
+                    BusinessLocation bizLocation = new BusinessLocation(data[0], data[1], Convert.ToInt32(data[2])); //create new BusinessLocation object from string[]
+                    bizList.Add(bizLocation); //Populate list
                 }
-                else if (option == 3)
-                {
-                    AssignToken(personList);
-                }
-                else if (option == 4)
-                {
-                    DisplayBusinessLocation(bizList);
-                }
-                else if (option == 5)
-                {
-                    EditBusinessLocation(bizList);
-                }
-                else if (option == 6)
-                {
-                    checkIn(personList, bizList);
-                }
-                else if (option == 7)
-                {
-                    checkOut(personList);
-                }
-                else if (option == 8)
-                {
-                    DisplaySHNFacilities(SHNList);
-                }
-                else if (option == 9)
-                {
-                    CreateVisitor(personList);
-                }
-                else if (option == 10)
-                {
-                    NewTravelEntry(personList, SHNList);
-                }
-                else if (option == 11)
-                {
-                    CalculateSHNCharges(personList);
-                }
+                List<SHNFacility> SHNList = SHNAPI();
+                /*DisplaySHNFacilities(SHNList);
+                CreateVisitor(personList);
+                NewTravelEntry(personList, SHNList);
+                CalculateSHNCharges(personList);
+                DisplayVisitors(visitorList);
+                DisplayPersonDetails(personList);
+                AssignToken(personList);
+                DisplayBusinessLocation(bizList);
+                EditBusinessLocation(bizList);
+                checkIn(personList, bizList);
+                checkOut(personList);*/
+
                 DisplayMenu();
                 Console.Write("\nEnter option: ");
-                option = Convert.ToInt32(Console.ReadLine());
+                int option = Convert.ToInt32(Console.ReadLine());
+                while (option != 0)
+                {
+                    if (option == 1)
+                    {
+                        DisplayVisitors(visitorList);
+                    }
+                    else if (option == 2)
+                    {
+                        DisplayPersonDetails(personList);
+                    }
+                    else if (option == 3)
+                    {
+                        AssignToken(personList);
+                    }
+                    else if (option == 4)
+                    {
+                        DisplayBusinessLocation(bizList);
+                    }
+                    else if (option == 5)
+                    {
+                        EditBusinessLocation(bizList);
+                    }
+                    else if (option == 6)
+                    {
+                        checkIn(personList, bizList);
+                    }
+                    else if (option == 7)
+                    {
+                        checkOut(personList);
+                    }
+                    else if (option == 8)
+                    {
+                        DisplaySHNFacilities(SHNList);
+                    }
+                    else if (option == 9)
+                    {
+                        CreateVisitor(personList);
+                    }
+                    else if (option == 10)
+                    {
+                        NewTravelEntry(personList, SHNList);
+                    }
+                    else if (option == 11)
+                    {
+                        CalculateSHNCharges(personList);
+                    }
+                    else if (option == 12)
+                    {
+                        ContactTracingReport(personList);
+                    }
+                    DisplayMenu();
+                    Console.Write("\nEnter option: ");
+                    option = Convert.ToInt32(Console.ReadLine());
+                }
+                Console.WriteLine("Bye!");
             }
-            Console.WriteLine("Bye!");
         }
     }
 }
