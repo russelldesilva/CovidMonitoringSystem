@@ -338,10 +338,14 @@ namespace COVID_Monitoring_System
         {
             Console.Write("Enter Buiness Location: ");
             string bizLocation = Console.ReadLine();
+            Console.Write("Enter Date: ");
+            string date = Console.ReadLine();
             Console.Write("Enter Start Time: ");
-            DateTime startTime = Convert.ToDateTime(Console.ReadLine());
+            string startTime = Console.ReadLine();
             Console.Write("Enter End Time: ");
-            DateTime endTime = Convert.ToDateTime(Console.ReadLine());
+            string endTime = Console.ReadLine();
+            DateTime startDate = Convert.ToDateTime(date +  " " + startTime);
+            DateTime endDate = Convert.ToDateTime(date +  " "  + endTime);
             using (StreamWriter sw = new StreamWriter("ContactTracing.txt", false))
             {
                 foreach (Person person in personList)
@@ -350,7 +354,7 @@ namespace COVID_Monitoring_System
                     {
                         if (safeEntry.Location.BusinessName == bizLocation)
                         {
-                            if (safeEntry.CheckIn < endTime && safeEntry.CheckIn > startTime || safeEntry.CheckOut < endTime && safeEntry.CheckOut > startTime)
+                            if (safeEntry.CheckIn < endDate && safeEntry.CheckIn > startDate || safeEntry.CheckOut < endDate && safeEntry.CheckOut > startDate)
                             {
                                 string[] contactTracingData = { person.Name, safeEntry.CheckIn.ToString(), safeEntry.CheckOut.ToString() };
 
