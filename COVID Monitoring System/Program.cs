@@ -395,6 +395,7 @@ namespace COVID_Monitoring_System
             {
                 try
                 {
+                    Console.Write("Enter option: ");
                     option = Convert.ToInt32(Console.ReadLine());
                     invalid = false;
                 }
