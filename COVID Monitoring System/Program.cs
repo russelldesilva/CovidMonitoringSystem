@@ -387,6 +387,29 @@ namespace COVID_Monitoring_System
             }
         }
 
+        static int ValidOption()
+        {
+            int option = 256;
+            bool invalid = true;
+            while (invalid)
+            {
+                try
+                {
+                    option = Convert.ToInt32(Console.ReadLine());
+                    invalid = false;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Enter an integer (0-13)!");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Invalid input!");
+                }
+            }
+            return option;
+        }
+
         static void Main(string[] args)
         {
             List<Person> personList = new List<Person>();
@@ -433,8 +456,7 @@ namespace COVID_Monitoring_System
             checkOut(personList);*/
 
             DisplayMenu();
-            Console.Write("\nEnter option: ");
-            int option = Convert.ToInt32(Console.ReadLine());
+            int option = ValidOption();
             while (option != 0)
             {
                 if (option == 1)
@@ -489,9 +511,12 @@ namespace COVID_Monitoring_System
                 {
                     SHNStatusReport(personList);
                 }
+                else
+                {
+                    Console.WriteLine("Enter a number 0-13!");
+                }
                 DisplayMenu();
-                Console.Write("\nEnter option: ");
-                option = Convert.ToInt32(Console.ReadLine());
+                option = ValidOption();
             }
             Console.WriteLine("Bye!");
         }
