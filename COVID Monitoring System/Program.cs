@@ -313,7 +313,6 @@ namespace COVID_Monitoring_System
                         p.AddTravelEntry(newEntry);
                         Console.WriteLine("Travel entry added. Welcome to Singapore!");
                     }
-                    break;
                 }
                 if (!found)
                 {
@@ -337,7 +336,7 @@ namespace COVID_Monitoring_System
                         nameFound = true;
                         foreach (TravelEntry t in p.TravelEntryList)
                         {
-                            if ((t.SHNEndDate.CompareTo(DateTime.Now) >= 0) && (!t.IsPaid))
+                            if (!t.IsPaid)
                             {
                                 entryFound = true;
                                 double SHNcharge = p.CalculateSHNCharges() * 1.07;

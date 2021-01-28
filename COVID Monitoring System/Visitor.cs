@@ -41,20 +41,16 @@ namespace COVID_Monitoring_System
 			double swabTest = 200;
 			double transportation = 0;
 			double SDF = 0;
-			foreach (TravelEntry t in TravelEntryList)
-			{ 
-				if ((t.SHNEndDate.CompareTo(DateTime.Now) >= 0) && (!t.IsPaid))
-				{
-					if ((t.SHNEndDate - t.EntryDate).Days <= 7)
-					{
-						transportation = 80;
-					}
-					else if ((t.SHNEndDate - t.EntryDate).Days == 14)
-					{
-						transportation = t.SHNStay.CalculateTravelCost(t.EntryMode, t.EntryDate);
-						SDF = 2000;
-					}
-				}
+			TravelEntry t = TravelEntryList[^1];
+			int duration = (t.SHNEndDate - t.EntryDate).Days;
+			if (duration <= 7)
+			{
+				transportation = 80;
+			}
+			else if (duration == 14)
+			{
+				transportation = t.SHNStay.CalculateTravelCost(t.EntryMode, t.EntryDate);
+				SDF = 2000;
 			}
 			double totalCost = swabTest + transportation + SDF;
 			return totalCost;

@@ -77,23 +77,24 @@ namespace COVID_Monitoring_System
         {
             double baseCost = 0;
             double surcharge = 1;
+            TimeSpan entryTime = entry.TimeOfDay;
             if (mode == "Air")
             {
-                baseCost = 50 * DistFromAirCheckpoint * 0.22;
+                baseCost = 50 + DistFromAirCheckpoint * 0.22;
             }
             else if (mode == "Sea")
             {
-                baseCost = 50 * DistFromSeaCheckpoint * 0.22;
+                baseCost = 50 + DistFromSeaCheckpoint * 0.22;
             }
             else if (mode == "Land")
             {
-                baseCost = 50 * DistFromLandCheckpoint * 0.22;
+                baseCost = 50 + DistFromLandCheckpoint * 0.22;
             }
-            if (entry.TimeOfDay > Convert.ToDateTime("06:00").TimeOfDay || entry.TimeOfDay < Convert.ToDateTime("08:59").TimeOfDay)
+            if ((entryTime > Convert.ToDateTime("06:00").TimeOfDay && entryTime < Convert.ToDateTime("08:59").TimeOfDay) || (entryTime > Convert.ToDateTime("18:00").TimeOfDay && entryTime < Convert.ToDateTime("23:59").TimeOfDay))
             {
                 surcharge += 0.25;
             }
-            else if (entry.TimeOfDay > Convert.ToDateTime("00:00").TimeOfDay || entry.TimeOfDay < Convert.ToDateTime("05:59").TimeOfDay)
+            else if (entryTime > Convert.ToDateTime("00:00").TimeOfDay && entryTime < Convert.ToDateTime("05:59").TimeOfDay)
             {
                 surcharge += 0.5;
             }
