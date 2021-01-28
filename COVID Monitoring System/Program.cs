@@ -272,90 +272,87 @@ namespace COVID_Monitoring_System
         //Basic Feature 12
         static void NewTravelEntry(List<Person> personList, List<SHNFacility> SHNList)
         {
-            bool found = false;
-            while (!found)
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+            Person p = InitPerson(personList, name);
+            while (p.Name == null)
             {
+                Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
-                string name = Console.ReadLine();
-                foreach (Person p in personList)
-                {
-                    if (p.Name == name)
-                    {
-                        found = true;
-                        Console.Write("Enter last country of embarkation: ");
-                        string lastCountry = Console.ReadLine();
-                        Console.Write("Enter mode of entry: ");
-                        string entryMode = Console.ReadLine();
-                        TravelEntry newEntry = new TravelEntry(lastCountry, entryMode, DateTime.Now);
-                        newEntry.CalculateSHNDuration();
-                        if ((newEntry.SHNEndDate - DateTime.Now).Days + 1 == 14)
-                        {
-                            Console.WriteLine("You are required to do SHN at a SDF.\nPlease choose your preferred facility: ");
-                            DisplaySHNFacilities(SHNList);
-                            Console.Write("Enter name of facility: ");
-                            string SHNname = Console.ReadLine();
-                            foreach (SHNFacility s in SHNList)
-                            {
-                                if (s.FacilityName == SHNname)
-                                {
-                                    if (s.IsAvailable())
-                                    {
-                                        s.FacilityVacancy -= 1;
-                                        newEntry.AssignSHNFacility(s);
-                                    }
-                                }
-                            }
-                        }
-                        else if ((newEntry.SHNEndDate - DateTime.Now).Days + 1 == 7)
-                        {
-                            Console.WriteLine("You are required to do SHN at your own accomodation.");
-                        }
-                        p.AddTravelEntry(newEntry);
-                        Console.WriteLine("Travel entry added. Welcome to Singapore!");
-                    }
-                }
-                if (!found)
-                {
-                    Console.WriteLine("Name not found!");
-                }
+                name = Console.ReadLine();
+                p = InitPerson(personList, name);
             }
+            Console.Write("Enter last country of embarkation: ");
+            string lastCountry = Console.ReadLine();
+            Console.Write("Enter mode of entry: ");
+            string entryMode = Console.ReadLine();
+            while (entryMode != "Sea" && entryMode != "Land" && entryMode != "Air")
+            {
+                Console.WriteLine("Invalid entry mode! (Land, Sea or Air only)");
+                Console.Write("Enter mode of entry: ");
+                entryMode = Console.ReadLine();
+            }
+            TravelEntry newEntry = new TravelEntry(lastCountry, entryMode, DateTime.Now);
+            newEntry.CalculateSHNDuration();
+            if ((newEntry.SHNEndDate - DateTime.Now).Days + 1 == 14)
+            {
+                Console.WriteLine("You are required to do SHN at a SDF.\nPlease choose your preferred facility: ");
+                DisplaySHNFacilities(SHNList);
+                Console.Write("Enter name of facility: ");
+                string SHNname = Console.ReadLine();
+                SHNFacility s = InitSHNFacility(SHNList, SHNname);
+                while (s.FacilityName == null)
+                {
+                    Console.WriteLine("Invalid facility name!");
+                    DisplaySHNFacilities(SHNList);
+                    Console.Write("Enter name of facility: ");
+                    SHNname = Console.ReadLine();
+                    s = InitSHNFacility(SHNList, SHNname);
+                }
+                if (s.IsAvailable())
+                {
+                    s.FacilityVacancy -= 1;
+                    newEntry.AssignSHNFacility(s);
+                }
+
+                            
+            }
+            else if ((newEntry.SHNEndDate - DateTime.Now).Days + 1 == 7)
+            {
+                Console.WriteLine("You are required to do SHN at your own accomodation.");
+            }
+            p.AddTravelEntry(newEntry);
+            Console.WriteLine("Travel entry added. Welcome to Singapore!");
         }
         //Basic feature 13
         static void CalculateSHNCharges(List<Person> personList)
         {
-            bool nameFound = false;
+            
             bool entryFound = false;
-            while (!nameFound)
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+            Person p = InitPerson(personList, name);
+            while (p.Name == null)
             {
+                Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
-                string name = Console.ReadLine();
-                foreach (Person p in personList)
+                name = Console.ReadLine();
+                p = InitPerson(personList, name);
+            }
+            foreach (TravelEntry t in p.TravelEntryList)
+            {
+                if (!t.IsPaid)
                 {
-                    if (p.Name == name)
-                    {
-                        nameFound = true;
-                        foreach (TravelEntry t in p.TravelEntryList)
-                        {
-                            if (!t.IsPaid)
-                            {
-                                entryFound = true;
-                                double SHNcharge = p.CalculateSHNCharges() * 1.07;
-                                Console.WriteLine("Total Charge: ${0}", SHNcharge.ToString("0.00"));
-                                t.IsPaid = true;
-                                break;
-                            }
-                        }
-                        if (!entryFound)
-                        {
-                            Console.WriteLine("{0} has no unpaid travel entries!", name);
-                        }
-                        break;
-                    }
+                    entryFound = true;
+                    double SHNcharge = p.CalculateSHNCharges() * 1.07;
+                    Console.WriteLine("Total Charge: ${0}", SHNcharge.ToString("0.00"));
+                    t.IsPaid = true;
+                    break;
                 }
-                if (!nameFound)
-                {
-                    Console.WriteLine("Name not found!");
-                }
+            }
+            if (!entryFound)
+            {
+                Console.WriteLine("{0} has no unpaid travel entries!", name);
             }
         }
         //Advanced Feature 1
@@ -469,6 +466,30 @@ namespace COVID_Monitoring_System
                 }
             }
             return false;
+        }
+        static SHNFacility InitSHNFacility(List<SHNFacility> SHNList, string name)
+        {
+            foreach (SHNFacility s in SHNList)
+            {
+                if (name == s.FacilityName)
+                {
+
+                    return s;
+                }
+            }
+            return new SHNFacility();
+        }
+        static Person InitPerson(List<Person> personList, string name)
+        {
+            foreach (Person p in personList)
+            {
+                if (name == p.Name)
+                {
+
+                    return p;
+                }
+            }
+            return new Resident();
         }
         static void Main(string[] args)
         {
