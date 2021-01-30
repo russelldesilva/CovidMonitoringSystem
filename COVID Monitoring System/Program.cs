@@ -86,21 +86,29 @@ namespace COVID_Monitoring_System
         //Basic Feature 4
         static void DisplayPersonDetails(List<Person> personList)
         {
-            Console.WriteLine("Enter Name: ");
-            string name = Console.ReadLine();
-            foreach (Person person in personList)
+            while (true)
             {
-                if (name == person.Name)
+                Console.WriteLine("Enter Name: ");
+                string name = Console.ReadLine();
+                foreach (Person person in personList)
                 {
-                    Console.WriteLine(person.ToString());
-                    if (person is Resident)
+                    if (name == person.Name)
                     {
-                        Resident resident = (Resident)person;
-                        Console.WriteLine(resident.Token.ToString());
+                        Console.WriteLine(person.ToString());
+                        if (person is Resident)
+                        {
+                            Resident resident = (Resident)person;
+                            Console.WriteLine(resident.Token.ToString());
+                            break;
+                        }
+                       
                     }
                 }
-
+                Console.WriteLine("Invalid name entered. Please try again");
+                continue;
             }
+
+            
 
         }
         //Generate random and unique Serial Number for Token
@@ -133,32 +141,42 @@ namespace COVID_Monitoring_System
         //Basic Feature 5
         static void AssignToken(List<Person> personList)
         {
-            Console.WriteLine("Enter Name: ");
-            string name = Console.ReadLine();
-            foreach (Person person in personList)
+ 
             {
-                if (name == person.Name)
+                Console.Write("Enter name: ");
+                string name = Console.ReadLine();
+                Person p = InitPerson(personList, name);
+                while (p.Name == null)
                 {
-                    if (person is Resident)
-
-                    {
-                        DateTime today = DateTime.Today;
-                        Resident resident = (Resident)person;
-                        if (resident.Token.SerialNo is null || today > resident.Token.ExpiryDate.AddMonths(-1))
-                        {
-                            string serialNo = GenerateSerialNo(personList);
-                            resident.Token.SerialNo = serialNo;
-                            resident.Token.CollectionLocation = "Kallang CC";
-
-                            today = today.AddMonths(6);
-
-                            resident.Token.ExpiryDate = today;
-                        }
-
-                    }
-
+                    Console.WriteLine("Name not found!");
+                    Console.Write("Enter name: ");
+                    name = Console.ReadLine();
+                    p = InitPerson(personList, name);
                 }
+ 
+                if (p is Resident)
+
+                {
+                    DateTime today = DateTime.Today;
+                    Resident resident = (Resident)p;
+                            
+                    if (resident.Token.SerialNo is null | today > resident.Token.ExpiryDate.AddMonths(1))
+                    {                               
+                        string serialNo = GenerateSerialNo(personList);
+                        resident.Token.SerialNo = serialNo;
+                        resident.Token.CollectionLocation = "Kallang CC";
+
+                        today = today.AddMonths(6);
+
+                        resident.Token.ExpiryDate = today;
+                        Console.WriteLine("You have been assigned a token!");
+                    }
+                          
+                }
+
+              
             }
+            
         }
         //Basic Feature 6
         static void DisplayBusinessLocation(List<BusinessLocation> bizList)
@@ -171,77 +189,106 @@ namespace COVID_Monitoring_System
         //Basic Feature 7
         static void EditBusinessLocation(List<BusinessLocation> bizList)
         {
-            Console.WriteLine("Enter Details: ");
-            string details = Console.ReadLine();
-            foreach (BusinessLocation businessLocation in bizList)
+            while (true)
             {
-                if (details == businessLocation.BusinessName)
+                Console.WriteLine("Enter Details: ");
+                string details = Console.ReadLine();
+                foreach (BusinessLocation businessLocation in bizList)
                 {
-                    Console.WriteLine("Edit Maximum Capacity: ");
-                    int maximumCapacity = Convert.ToInt32(Console.ReadLine());
-                    businessLocation.MaximumCapacity = maximumCapacity;
-                }
+                    if (details == businessLocation.BusinessName)
+                    {
+                        Console.WriteLine("Edit Maximum Capacity: ");
+                        int maximumCapacity = Convert.ToInt32(Console.ReadLine());
+                        businessLocation.MaximumCapacity = maximumCapacity;
+                    }
 
+                }
+                Console.WriteLine("Invalid location entered. Please try again");
+                continue;
             }
+            
 
         }
         //Basic Feature 8
         static void CheckIn(List<Person> personList, List<BusinessLocation> bizList)
         {
-            Console.WriteLine("Enter Name: ");
-            string name = Console.ReadLine();
-            foreach (Person person in personList)
+            while (true)
             {
-                if (name == person.Name)
+                Console.WriteLine("Enter Name: ");
+                string name = Console.ReadLine();
+                foreach (Person person in personList)
                 {
-                    DisplayBusinessLocation(bizList);
-                    Console.WriteLine("Choose Business Location: ");
-                    string locationName = Console.ReadLine();
-                    foreach (BusinessLocation location in bizList)
+                    if (name == person.Name)
                     {
-                        if (locationName == location.BusinessName)
+                        DisplayBusinessLocation(bizList);
+                        Console.WriteLine("Choose Business Location: ");
+                        string locationName = Console.ReadLine();
+                        foreach (BusinessLocation location in bizList)
                         {
-                            if (!location.IsFull())
+                            if (locationName == location.BusinessName)
                             {
-                                DateTime today = DateTime.Now;
-                                SafeEntry safeEntry = new SafeEntry(today, location);
-                                person.AddSafeEntry(safeEntry);
-                                location.VisitorsNow += 1;
+                                if (!location.IsFull())
+                                {
+                                    DateTime today = DateTime.Now;
+                                    SafeEntry safeEntry = new SafeEntry(today, location);
+                                    person.AddSafeEntry(safeEntry);
+                                    location.VisitorsNow += 1;
+                                }
                             }
                         }
                     }
                 }
+                Console.WriteLine("Invalid name entered. Please try again");
+                continue;
             }
+            
         }
         //Basic Feature 9
         static void CheckOut(List<Person> personList)
         {
-            Console.WriteLine("Enter Name: ");
-            string name = Console.ReadLine();
-            foreach (Person person in personList)
+            
             {
-                if (name == person.Name)
+                Console.Write("Enter name: ");
+                string name = Console.ReadLine();
+                Person p = InitPerson(personList, name);
+                while (p.Name == null)
                 {
-                    foreach (SafeEntry safeEntry in person.SafeEntryList)
-                    {
-                        DateTime checkOut = safeEntry.CheckOut;
-                        if (checkOut == DateTime.MinValue)
-                        {
-                            Console.WriteLine(safeEntry.ToString());
-                        }
-
-                    }
-                    Console.WriteLine("Select Location to check out: ");
-                    string location = Console.ReadLine();
-                    foreach (SafeEntry safeEntry in person.SafeEntryList)
-                    {
-                        if (location == safeEntry.Location.BusinessName)
-                        {
-                            safeEntry.performCheckOut();
-                        }
-                    }
+                    Console.WriteLine("Name not found!");
+                    Console.Write("Enter name: ");
+                    name = Console.ReadLine();
+                    p = InitPerson(personList, name);
                 }
+  
+                foreach (SafeEntry safeEntry in p.SafeEntryList)
+                {
+                    DateTime checkOut = safeEntry.CheckOut;
+                    if (checkOut == DateTime.MinValue)
+                    {
+                        Console.WriteLine(safeEntry.ToString());
+                    }
+
+                }
+                Console.WriteLine("Select Location to check out: ");
+                string location = Console.ReadLine();
+                bool checkout = false;
+
+                foreach (SafeEntry safeEntry in p.SafeEntryList)
+                {
+                    if (location == safeEntry.Location.BusinessName)
+                    {
+                        safeEntry.performCheckOut();
+                        checkout = true;
+                    }
+                            
+                }
+                if(checkout == false)
+                {
+                    Console.WriteLine("Unable to CheckOut (You need to CheckIn first)");
+                }
+
+                
             }
+            
         }
 
 
