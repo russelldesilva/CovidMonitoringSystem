@@ -89,7 +89,7 @@ namespace COVID_Monitoring_System
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
             Person p = InitPerson(personList, name);
-            while (p.Name == null)
+            while (p == null)
             {
                 Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
@@ -99,8 +99,11 @@ namespace COVID_Monitoring_System
             Console.WriteLine(p.ToString());
             if (p is Resident)
             {
-                Resident resident = (Resident)p;
-                Console.WriteLine(resident.Token.ToString());
+                Resident r = (Resident)p; 
+                if (r.Token.ExpiryDate != DateTime.MinValue)
+                {
+                    Console.WriteLine(r.Token.ToString());
+                }            
             }
         }
         //Generate random and unique Serial Number for Token
@@ -136,7 +139,7 @@ namespace COVID_Monitoring_System
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
             Person p = InitPerson(personList, name);
-            while (p.Name == null)
+            while (p == null)
             {
                 Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
@@ -169,9 +172,10 @@ namespace COVID_Monitoring_System
         //Basic Feature 6
         static void DisplayBusinessLocation(List<BusinessLocation> bizList)
         {
-            foreach (BusinessLocation businessLocation in bizList)
+            Console.WriteLine("{0,-20}{1,-15}{2,-15}{3,-15}", "Business Name", "Branch Code", "Max Capacity", "Visitors Now");
+            foreach (BusinessLocation b in bizList)
             {
-                Console.WriteLine(businessLocation.ToString());
+                Console.WriteLine("{0,-20}{1,-15}{2,-15}{3,-15}",b.BusinessName,b.BranchCode,b.MaximumCapacity,b.VisitorsNow);
             }
         }
         //Basic Feature 7
@@ -199,7 +203,7 @@ namespace COVID_Monitoring_System
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
             Person p = InitPerson(personList, name);
-            while (p.Name == null)
+            while (p == null)
             {
                 Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
@@ -250,7 +254,7 @@ namespace COVID_Monitoring_System
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
             Person p = InitPerson(personList, name);
-            while (p.Name == null)
+            while (p == null)
             {
                 Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
@@ -321,7 +325,7 @@ namespace COVID_Monitoring_System
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
             Person p = InitPerson(personList, name);
-            while (p.Name == null)
+            while (p == null)
             {
                 Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
@@ -376,7 +380,7 @@ namespace COVID_Monitoring_System
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
             Person p = InitPerson(personList, name);
-            while (p.Name == null)
+            while (p == null)
             {
                 Console.WriteLine("Name not found!");
                 Console.Write("Enter name: ");
@@ -523,7 +527,7 @@ namespace COVID_Monitoring_System
                     return s;
                 }
             }
-            return new SHNFacility();
+            return null;
         }
         static Person InitPerson(List<Person> personList, string name)
         {
@@ -535,7 +539,7 @@ namespace COVID_Monitoring_System
                     return p;
                 }
             }
-            return new Resident();
+            return null;
         }
         static void Main(string[] args)
         {

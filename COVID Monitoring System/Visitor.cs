@@ -58,7 +58,7 @@ namespace COVID_Monitoring_System
 
         public override string ToString()
         {
-            return base.ToString() + "\tPassport No: " + PassportNo + "\tNationality: " + Nationality;
+            return base.ToString() + "Passport No: " + PassportNo + "\tNationality: " + Nationality;
         }
 
     }
