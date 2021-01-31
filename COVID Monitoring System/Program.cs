@@ -37,7 +37,7 @@ namespace COVID_Monitoring_System
                 Console.WriteLine("[" + (i + 1) + "] " + menu[i]);
             }
             Console.WriteLine("[0] Quit the program");
-            Console.WriteLine("======================================");
+            Console.WriteLine("======================================\n");
         }
         //Basic Feature 1
         static List<string[]> FiletoList(string path) //convert each line of file to string array; string path = name of file
@@ -91,7 +91,7 @@ namespace COVID_Monitoring_System
             Person p = InitPerson(personList, name);
             while (p == null)
             {
-                Console.WriteLine("Name not found!");
+                Console.WriteLine("Name not found!\n");
                 Console.Write("Enter name: ");
                 name = Console.ReadLine();
                 p = InitPerson(personList, name);
@@ -105,6 +105,7 @@ namespace COVID_Monitoring_System
                     Console.WriteLine(r.Token.ToString());
                 }            
             }
+            Console.WriteLine();
         }
         //Generate random and unique Serial Number for Token
         static string GenerateSerialNo(List<Person> personList)
@@ -141,7 +142,7 @@ namespace COVID_Monitoring_System
             Person p = InitPerson(personList, name);
             while (p == null)
             {
-                Console.WriteLine("Name not found!");
+                Console.WriteLine("Name not found!\n");
                 Console.Write("Enter name: ");
                 name = Console.ReadLine();
                 p = InitPerson(personList, name);
@@ -157,16 +158,16 @@ namespace COVID_Monitoring_System
                     resident.Token.CollectionLocation = "Kallang CC";
                     today = today.AddMonths(6);
                     resident.Token.ExpiryDate = today;
-                    Console.WriteLine("You have been assigned a token!");
+                    Console.WriteLine("You have been assigned a token!\n");
                 }
                 else
                 {
-                    Console.WriteLine("Your token expires on {0}. You are not eligible for a replacement.", resident.Token.ExpiryDate);
+                    Console.WriteLine("Your token expires on {0}. You are not eligible for a replacement.\n", resident.Token.ExpiryDate);
                 }
             }
             else
             {
-                Console.WriteLine("Visitors are not allowed to have tokens!");
+                Console.WriteLine("Visitors are not allowed to have tokens!\n");
             }
         }
         //Basic Feature 6
@@ -177,6 +178,7 @@ namespace COVID_Monitoring_System
             {
                 Console.WriteLine("{0,-20}{1,-15}{2,-15}{3,-15}",b.BusinessName,b.BranchCode,b.MaximumCapacity,b.VisitorsNow);
             }
+            Console.WriteLine();
         }
         //Basic Feature 7
         static void EditBusinessLocation(List<BusinessLocation> bizList)
@@ -187,7 +189,7 @@ namespace COVID_Monitoring_System
             BusinessLocation biz = InitBussinessLocation(bizList, bizName);
             while (biz == null)
             {
-                Console.WriteLine("Business not found!");
+                Console.WriteLine("Business not found!\n");
                 DisplayBusinessLocation(bizList);
                 Console.Write("Enter Buiness Location: ");
                 bizName = Console.ReadLine();
@@ -196,6 +198,7 @@ namespace COVID_Monitoring_System
             Console.WriteLine("Edit Maximum Capacity: ");
             int maximumCapacity = Convert.ToInt32(Console.ReadLine());
             biz.MaximumCapacity = maximumCapacity;
+            Console.WriteLine();
         }
         //Basic Feature 8
         static void CheckIn(List<Person> personList, List<BusinessLocation> bizList)
@@ -205,7 +208,7 @@ namespace COVID_Monitoring_System
             Person p = InitPerson(personList, name);
             while (p == null)
             {
-                Console.WriteLine("Name not found!");
+                Console.WriteLine("Name not found!\n");
                 Console.Write("Enter name: ");
                 name = Console.ReadLine();
                 p = InitPerson(personList, name);
@@ -216,7 +219,7 @@ namespace COVID_Monitoring_System
             BusinessLocation biz = InitBussinessLocation(bizList, bizName);
             while (biz == null)
             {
-                Console.WriteLine("Business not found!");
+                Console.WriteLine("Business not found!\n");
                 DisplayBusinessLocation(bizList);
                 Console.Write("Enter Buiness Location: ");
                 bizName = Console.ReadLine();
@@ -240,12 +243,12 @@ namespace COVID_Monitoring_System
                     SafeEntry safeEntry = new SafeEntry(today, biz);
                     p.AddSafeEntry(safeEntry);
                     biz.VisitorsNow += 1;
-                    Console.WriteLine("Successfully checked in.");
+                    Console.WriteLine("Successfully checked in.\n");
                 }
             }
             else
             {
-                Console.WriteLine("Business is full!");
+                Console.WriteLine("Business is full!\n");
             }
         }
         //Basic Feature 9
@@ -256,7 +259,7 @@ namespace COVID_Monitoring_System
             Person p = InitPerson(personList, name);
             while (p == null)
             {
-                Console.WriteLine("Name not found!");
+                Console.WriteLine("Name not found!\n");
                 Console.Write("Enter name: ");
                 name = Console.ReadLine();
                 p = InitPerson(personList, name);
@@ -276,7 +279,7 @@ namespace COVID_Monitoring_System
             BusinessLocation biz = InitBussinessLocation(bizList, bizName);
             while (biz == null)
             {
-                Console.WriteLine("Business not found!");
+                Console.WriteLine("Business not found!\n");
                 DisplayBusinessLocation(bizList);
                 Console.Write("Enter Buiness Location: ");
                 bizName = Console.ReadLine();
@@ -289,12 +292,13 @@ namespace COVID_Monitoring_System
                 {
                     safeEntry.performCheckOut();
                     checkout = true;
-                    Console.WriteLine("Successfully checked out.");
+                    Console.WriteLine("Successfully checked out.\n");
+                    break;
                 }
             }
             if(checkout == false)
             {
-                Console.WriteLine("Unable to check out (You need to check in first).");
+                Console.WriteLine("Unable to check out (You need to check in first).\n");
             }
         }
         //Basic Feature 10
@@ -305,6 +309,7 @@ namespace COVID_Monitoring_System
             {
                 Console.WriteLine("{0,-15}{1,10}{2,30}{3,30}{4,30}", s.FacilityName, s.FacilityCapacity, s.DistFromAirCheckpoint, s.DistFromSeaCheckpoint, s.DistFromLandCheckpoint);
             }
+            Console.WriteLine();
         }
         //Basic Feature 11
         static void CreateVisitor(List<Person> personList) //Create a new visitor object based on user inputs
@@ -317,7 +322,7 @@ namespace COVID_Monitoring_System
             string nationality = Console.ReadLine();
             Visitor newVisitor = new Visitor(name, passNo, nationality);
             personList.Add(newVisitor);
-            Console.WriteLine("New visitor created.");
+            Console.WriteLine("New visitor created.\n");
         }
         //Basic Feature 12
         static void NewTravelEntry(List<Person> personList, List<SHNFacility> SHNList)
@@ -327,7 +332,7 @@ namespace COVID_Monitoring_System
             Person p = InitPerson(personList, name);
             while (p == null)
             {
-                Console.WriteLine("Name not found!");
+                Console.WriteLine("Name not found!\n");
                 Console.Write("Enter name: ");
                 name = Console.ReadLine();
                 p = InitPerson(personList, name);
@@ -338,7 +343,7 @@ namespace COVID_Monitoring_System
             string entryMode = Console.ReadLine();
             while (entryMode != "Sea" && entryMode != "Land" && entryMode != "Air")
             {
-                Console.WriteLine("Invalid entry mode! (Land, Sea or Air only)");
+                Console.WriteLine("Invalid entry mode! (Land, Sea or Air only)\n");
                 Console.Write("Enter mode of entry: ");
                 entryMode = Console.ReadLine();
             }
@@ -351,9 +356,9 @@ namespace COVID_Monitoring_System
                 Console.Write("Enter name of facility: ");
                 string SHNname = Console.ReadLine();
                 SHNFacility s = InitSHNFacility(SHNList, SHNname);
-                while (s.FacilityName == null)
+                while (s == null)
                 {
-                    Console.WriteLine("Invalid facility name!");
+                    Console.WriteLine("Invalid facility name!\n");
                     DisplaySHNFacilities(SHNList);
                     Console.Write("Enter name of facility: ");
                     SHNname = Console.ReadLine();
@@ -370,7 +375,7 @@ namespace COVID_Monitoring_System
                 Console.WriteLine("You are required to do SHN at your own accomodation.");
             }
             p.AddTravelEntry(newEntry);
-            Console.WriteLine("Travel entry added. Welcome to Singapore!");
+            Console.WriteLine("Travel entry added. Welcome to Singapore!\n");
         }
         //Basic feature 13
         static void CalculateSHNCharges(List<Person> personList)
@@ -382,7 +387,7 @@ namespace COVID_Monitoring_System
             Person p = InitPerson(personList, name);
             while (p == null)
             {
-                Console.WriteLine("Name not found!");
+                Console.WriteLine("Name not found!\n");
                 Console.Write("Enter name: ");
                 name = Console.ReadLine();
                 p = InitPerson(personList, name);
@@ -393,14 +398,14 @@ namespace COVID_Monitoring_System
                 {
                     entryFound = true;
                     double SHNcharge = p.CalculateSHNCharges() * 1.07;
-                    Console.WriteLine("Total Charge: ${0}", SHNcharge.ToString("0.00"));
+                    Console.WriteLine("Total Charge: ${0}\n", SHNcharge.ToString("0.00"));
                     t.IsPaid = true;
                     break;
                 }
             }
             if (!entryFound)
             {
-                Console.WriteLine("{0} has no unpaid travel entries!", name);
+                Console.WriteLine("{0} has no unpaid travel entries!\n", name);
             }
         }
         //Advanced Feature 1
@@ -410,7 +415,7 @@ namespace COVID_Monitoring_System
             string bizLocation = Console.ReadLine();
             while (InitBussinessLocation(bizList, bizLocation) == null)
             {
-                Console.WriteLine("Business not found!");
+                Console.WriteLine("Business not found!\n");
                 Console.Write("Enter Buiness Location: ");
                 bizLocation = Console.ReadLine();
             }
@@ -437,7 +442,7 @@ namespace COVID_Monitoring_System
                     }
                 }
             }
-            Console.WriteLine("Report generated!");
+            Console.WriteLine("Report generated!\n");
         }
 
         //Advanced Feature 2
@@ -448,7 +453,7 @@ namespace COVID_Monitoring_System
             bool parsed = DateTime.TryParse(unparsedDate, out DateTime parsedDate);
             while (!parsed)
             {
-                Console.WriteLine("Invalid Date!");
+                Console.WriteLine("Invalid Date!\n");
                 Console.Write("Enter date: ");
                 unparsedDate = Console.ReadLine();
                 parsed = DateTime.TryParse(unparsedDate, out parsedDate);
@@ -465,7 +470,7 @@ namespace COVID_Monitoring_System
                     }
                 }
             }
-            Console.WriteLine("Report generated!");
+            Console.WriteLine("Report generated!\n");
         }
         static int ValidOption()
         {
@@ -482,11 +487,11 @@ namespace COVID_Monitoring_System
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("Enter an integer (0-13)!");
+                    Console.WriteLine("Enter an integer (0-13)!\n");
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Invalid input!");
+                    Console.WriteLine("Invalid input!\n");
                 }
             }
             return option;
