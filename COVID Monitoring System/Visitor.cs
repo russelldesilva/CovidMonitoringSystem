@@ -29,7 +29,7 @@ namespace COVID_Monitoring_System
 			get { return nationality; }
 			set { nationality = value; }
 		}
-
+		public Visitor() { }
 		public Visitor(string name, string passportNo, string nationality) : base(name)
 		{
 			this.passportNo = passportNo;

@@ -81,6 +81,7 @@ namespace COVID_Monitoring_System
             foreach (Visitor visitor in visitorList)
             {
                 Console.WriteLine(visitor.ToString());
+                Console.WriteLine();
             }
         }
         //Basic Feature 4
@@ -304,10 +305,10 @@ namespace COVID_Monitoring_System
         //Basic Feature 10
         static void DisplaySHNFacilities(List<SHNFacility> SHNList)//display SHN facilities
         {
-            Console.WriteLine("{0,-15}{1,10}{2,30}{3,30}{4,30}", "Name", "Capacity", "Dist from Air checkpoint", "Dist from Sea checkpoint", "Dist from Land checkpoint");
+            Console.WriteLine("{0,-15}{1,10}{2,10}{3,25}{4,25}{5,25}", "Name", "Capacity", "Vacancy", "Dist from Air checkpoint", "Dist from Sea checkpoint", "Dist from Land checkpoint");
             foreach (SHNFacility s in SHNList)
             {
-                Console.WriteLine("{0,-15}{1,10}{2,30}{3,30}{4,30}", s.FacilityName, s.FacilityCapacity, s.DistFromAirCheckpoint, s.DistFromSeaCheckpoint, s.DistFromLandCheckpoint);
+                Console.WriteLine("{0,-15}{1,10}{2,10}{3,25}{4,25}{5,25}", s.FacilityName, s.FacilityCapacity, s.FacilityVacancy,s.DistFromAirCheckpoint, s.DistFromSeaCheckpoint, s.DistFromLandCheckpoint);
             }
             Console.WriteLine();
         }
@@ -368,6 +369,10 @@ namespace COVID_Monitoring_System
                 {
                     s.FacilityVacancy -= 1;
                     newEntry.AssignSHNFacility(s);
+                }
+                else
+                {
+                    Console.WriteLine("Facility is full!");
                 }
             }
             else if ((newEntry.SHNEndDate - DateTime.Now).Days + 1 == 7)
@@ -448,16 +453,7 @@ namespace COVID_Monitoring_System
         //Advanced Feature 2
         static void SHNStatusReport(List<Person> personList)
         {
-            Console.Write("Enter date: ");
-            string unparsedDate = Console.ReadLine();
-            bool parsed = DateTime.TryParse(unparsedDate, out DateTime parsedDate);
-            while (!parsed)
-            {
-                Console.WriteLine("Invalid Date!\n");
-                Console.Write("Enter date: ");
-                unparsedDate = Console.ReadLine();
-                parsed = DateTime.TryParse(unparsedDate, out parsedDate);
-            }
+            DateTime parsedDate = ValidDate("date");
             using (StreamWriter sw = new StreamWriter("SHNStatus.csv", false))
             foreach (Person p in personList)
             {
@@ -551,9 +547,9 @@ namespace COVID_Monitoring_System
             List<Person> personList = new List<Person>();
             List<Visitor> visitorList = new List<Visitor>();
             List<BusinessLocation> bizList = new List<BusinessLocation>();
+            List<SHNFacility> SHNList = SHNAPI();
             foreach (string[] data in FiletoList("Person.csv")) //convert Person.csv into list of string[] and process each item
             {
-
                 if (data[0] == "resident")
                 {
                     Resident resident = new Resident(data[1], data[2], Convert.ToDateTime(data[3])); //create new Resident object from string[]
@@ -562,13 +558,39 @@ namespace COVID_Monitoring_System
                         resident.Token.SerialNo = data[6];
                         resident.Token.CollectionLocation = data[7];
                         resident.Token.ExpiryDate = Convert.ToDateTime(data[8]);
-
+                    }
+                    if (data[9] != "")
+                    {
+                        TravelEntry t = new TravelEntry(data[9], data[10], Convert.ToDateTime(data[11]))
+                        {
+                            SHNEndDate = Convert.ToDateTime(data[12]),
+                            IsPaid = Convert.ToBoolean(data[13])
+                        };
+                        if (data[14] != "")
+                        {
+                            t.AssignSHNFacility(InitSHNFacility(SHNList, data[14]));
+                        }
+                        resident.AddTravelEntry(t);
                     }
                     personList.Add(resident); //Populate list
                 }
                 else if (data[0] == "visitor")
                 {
                     Visitor visitor = new Visitor(data[1], data[4], data[5]); //create new Visitor object from string[]
+
+                    if (data[9] != "")
+                    {
+                        TravelEntry t = new TravelEntry(data[9], data[10], Convert.ToDateTime(data[11]))
+                        {
+                            SHNEndDate = Convert.ToDateTime(data[12]),
+                            IsPaid = Convert.ToBoolean(data[13])
+                        };
+                        if (data[14] != "")
+                        {
+                            t.AssignSHNFacility(InitSHNFacility(SHNList, data[14]));
+                        }
+                        visitor.AddTravelEntry(t);
+                    }
                     personList.Add(visitor); //Populate list
                     visitorList.Add(visitor);
                 }
@@ -578,7 +600,6 @@ namespace COVID_Monitoring_System
                 BusinessLocation bizLocation = new BusinessLocation(data[0], data[1], Convert.ToInt32(data[2])); //create new BusinessLocation object from string[]
                 bizList.Add(bizLocation); //Populate list
             }
-            List<SHNFacility> SHNList = SHNAPI();
             int option = ValidOption();
             while (option != 0)
             {
