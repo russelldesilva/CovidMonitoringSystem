@@ -66,7 +66,7 @@ namespace COVID_Monitoring_System
 
         public override string ToString()
         {
-            return "Serial Number: " + SerialNo + "\tCollection Location: " + CollectionLocation + "\tExpiry Date: " + ExpiryDate;
+            return "TT Serial Number: " + SerialNo + "\tCollection Location: " + CollectionLocation + "\tExpiry Date: " + ExpiryDate;
         }
     }
 }

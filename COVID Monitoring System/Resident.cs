@@ -55,7 +55,6 @@ namespace COVID_Monitoring_System
             int duration = (t.SHNEndDate - t.EntryDate).Days;
             if (duration == 7)
             {
-
                 transportation = 20;
             }
             else if (duration == 14)
@@ -69,7 +68,8 @@ namespace COVID_Monitoring_System
 
         public override string ToString()
         {
-            return base.ToString() + "\tAddress: " + Address + "\tLast left country on: " + LastLeftCountry + Token.ToString();
+            return base.ToString() +
+                "Address: " + Address + "\tLast left country on: " + LastLeftCountry;
         }
     }
 }

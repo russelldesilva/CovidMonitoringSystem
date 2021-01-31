@@ -62,12 +62,10 @@ namespace COVID_Monitoring_System
         }
 
         public SHNFacility() { }
-
-        public SHNFacility(string n, int c, int v, double a, double s, double l)
+        public SHNFacility(string n, int c, double a, double s, double l)
         {
             FacilityName = n;
             FacilityCapacity = c;
-            FacilityVacancy = v;
             DistFromAirCheckpoint = a;
             DistFromSeaCheckpoint = s;
             DistFromLandCheckpoint = l;
@@ -104,7 +102,7 @@ namespace COVID_Monitoring_System
 
         public bool IsAvailable()
         {
-            if (FacilityVacancy < FacilityCapacity)
+            if (FacilityVacancy > 0)
             {
                 return true;
             }
@@ -116,8 +114,8 @@ namespace COVID_Monitoring_System
 
         public override string ToString()
         {
-            return "Facility Name: " + FacilityName + "\tFacility Capacity: " + FacilityCapacity + "\tFacility Vacancy: " + FacilityVacancy + "\tDistance from air checkpoint: " + DistFromAirCheckpoint
-                + "\tDistance from sea checkpoint: " + DistFromSeaCheckpoint + "\tDistance from land checkpoint: " + DistFromLandCheckpoint;
+           return "\nFacility Name: " + FacilityName + "\nFacility Capacity: " + FacilityCapacity + "\nFacility Vacancy: " + FacilityVacancy + "\nDistance from air checkpoint: " + DistFromAirCheckpoint
+                + "\nDistance from sea checkpoint: " + DistFromSeaCheckpoint + "\nDistance from land checkpoint: " + DistFromLandCheckpoint;
         }
     }
 }

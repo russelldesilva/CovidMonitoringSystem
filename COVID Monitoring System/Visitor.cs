@@ -29,7 +29,7 @@ namespace COVID_Monitoring_System
 			get { return nationality; }
 			set { nationality = value; }
 		}
-
+		public Visitor() { }
 		public Visitor(string name, string passportNo, string nationality) : base(name)
 		{
 			this.passportNo = passportNo;
@@ -58,7 +58,7 @@ namespace COVID_Monitoring_System
 
         public override string ToString()
         {
-            return base.ToString() + "\tPassport No: " + PassportNo + "\tNationality: " + Nationality;
+            return base.ToString() + "Passport No: " + PassportNo + "\tNationality: " + Nationality;
         }
 
     }
