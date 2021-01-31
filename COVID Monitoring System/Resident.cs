@@ -55,7 +55,6 @@ namespace COVID_Monitoring_System
             int duration = (t.SHNEndDate - t.EntryDate).Days;
             if (duration == 7)
             {
-
                 transportation = 20;
             }
             else if (duration == 14)

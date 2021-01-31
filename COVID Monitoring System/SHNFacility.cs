@@ -62,12 +62,10 @@ namespace COVID_Monitoring_System
         }
 
         public SHNFacility() { }
-
         public SHNFacility(string n, int c, double a, double s, double l)
         {
             FacilityName = n;
             FacilityCapacity = c;
-            FacilityVacancy = c;
             DistFromAirCheckpoint = a;
             DistFromSeaCheckpoint = s;
             DistFromLandCheckpoint = l;

@@ -75,7 +75,11 @@ namespace COVID_Monitoring_System
 
         public void AssignSHNFacility(SHNFacility s)
         { 
-            SHNStay = s;
+            if (SHNEndDate.CompareTo(DateTime.Now) >= 0)
+            {
+                SHNStay = s;
+                s.FacilityVacancy -= 1;
+            }
         }
         public void CalculateSHNDuration()
         {
@@ -96,8 +100,16 @@ namespace COVID_Monitoring_System
         }
         public override string ToString()
         {
-            return "Last Country of Embarkation: " + LastCountryOfEmbarkation + "\nEntry mode: " + EntryMode + "\nEntry Date: " + EntryDate + "" +
+            if (SHNStay.FacilityName != null)
+            {
+                return "Last Country of Embarkation: " + LastCountryOfEmbarkation + "\nEntry mode: " + EntryMode + "\nEntry Date: " + EntryDate + "" +
                 "\nSHN End Date: " + SHNEndDate + "\nPaid: " + IsPaid + "\nSHN Facility Information: " + SHNStay.ToString();
+            }
+            else
+            {
+                return "Last Country of Embarkation: " + LastCountryOfEmbarkation + "\nEntry mode: " + EntryMode + "\nEntry Date: " + EntryDate + "" +
+                "\nSHN End Date: " + SHNEndDate + "\nPaid: " + IsPaid;
+            }
         }
     }
 }
