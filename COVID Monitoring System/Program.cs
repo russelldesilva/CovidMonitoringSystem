@@ -14,6 +14,7 @@ namespace COVID_Monitoring_System
 {
     class Program
     {
+        //Creating a menu to access features
         static void DisplayMenu()
         {
             string[] menu = {
@@ -31,19 +32,19 @@ namespace COVID_Monitoring_System
                 "Generate Contact Tracing Report",
                 "Generate SHN Status Report"
             };
-            Console.WriteLine("================ Menu ================");
+            Console.WriteLine("================ Menu ================");//printing the menu
             for (int i = 0; i < menu.Length; i++)
             {
                 Console.WriteLine("[" + (i + 1) + "] " + menu[i]);
             }
             Console.WriteLine("[0] Quit the program");
-            Console.WriteLine("======================================");
+            Console.WriteLine("======================================");//stop the program 
         }
-        //Basic Feature 1
+        //Basic Feature 1 Load person and business location data
         static List<string[]> FiletoList(string path) //convert each line of file to string array; string path = name of file
         {
             List<string[]> DataList = new List<string[]>();
-            using (StreamReader sr = new StreamReader(path))
+            using (StreamReader sr = new StreamReader(path))//Read excel file 
             {
                 string header = sr.ReadLine();
                 string line = "";
@@ -55,7 +56,7 @@ namespace COVID_Monitoring_System
             }
             return DataList;
         }
-        //Basic Feature 2
+        //Basic Feature 2 load SHN facility data 
         static List<SHNFacility> SHNAPI() //call API and store JSON as List of SHNFacility objects
         {
             List<SHNFacility> SHNList = new List<SHNFacility>();
@@ -75,15 +76,15 @@ namespace COVID_Monitoring_System
             }
             return SHNList;
         }
-        //Basic Feature 3
-        static void DisplayVisitors(List<Visitor> visitorList)
+        //Basic Feature 3 List all visitors 
+        static void DisplayVisitors(List<Visitor> visitorList) // Displaying content of the list 
         {
             foreach (Visitor visitor in visitorList)
             {
                 Console.WriteLine(visitor.ToString());
             }
         }
-        //Basic Feature 4
+        //Basic Feature 4 List person deatails 
         static void DisplayPersonDetails(List<Person> personList)
         {
             while (true)
@@ -138,7 +139,7 @@ namespace COVID_Monitoring_System
             }
             return serialNo;
         }
-        //Basic Feature 5
+        //Basic Feature 5 Assign/Replace TraceTogether Token
         static void AssignToken(List<Person> personList)
         {
  
@@ -178,7 +179,7 @@ namespace COVID_Monitoring_System
             }
             
         }
-        //Basic Feature 6
+        //Basic Feature 6 List all business location 
         static void DisplayBusinessLocation(List<BusinessLocation> bizList)
         {
             foreach (BusinessLocation businessLocation in bizList)
@@ -186,7 +187,7 @@ namespace COVID_Monitoring_System
                 Console.WriteLine(businessLocation.ToString());
             }
         }
-        //Basic Feature 7
+        //Basic Feature 7 Edit business location capacity
         static void EditBusinessLocation(List<BusinessLocation> bizList)
         {
             while (true)
@@ -209,7 +210,7 @@ namespace COVID_Monitoring_System
             
 
         }
-        //Basic Feature 8
+        //Basic Feature 8 SafeEtry Check-In
         static void CheckIn(List<Person> personList, List<BusinessLocation> bizList)
         {
             while (true)
@@ -243,7 +244,7 @@ namespace COVID_Monitoring_System
             }
             
         }
-        //Basic Feature 9
+        //Basic Feature 9 SafeEntry Check-Out 
         static void CheckOut(List<Person> personList)
         {
             
@@ -294,7 +295,7 @@ namespace COVID_Monitoring_System
 
 
 
-        //Basic Feature 10
+        //Basic Feature 10 List all SHN Facilities
         static void DisplaySHNFacilities(List<SHNFacility> SHNList)//display SHN facilities
         {
             Console.WriteLine("{0,-15}{1,10}{2,30}{3,30}{4,30}", "Name", "Capacity", "Dist from Air checkpoint", "Dist from Sea checkpoint", "Dist from Land checkpoint");
@@ -303,7 +304,7 @@ namespace COVID_Monitoring_System
                 Console.WriteLine("{0,-15}{1,10}{2,30}{3,30}{4,30}", s.FacilityName, s.FacilityCapacity, s.DistFromAirCheckpoint, s.DistFromSeaCheckpoint, s.DistFromLandCheckpoint);
             }
         }
-        //Basic Feature 11
+        //Basic Feature 11 Create Visitors 
         static void CreateVisitor(List<Person> personList) //Create a new visitor object based on user inputs
         {
             Console.Write("Enter name: ");
@@ -316,7 +317,7 @@ namespace COVID_Monitoring_System
             personList.Add(newVisitor);
             Console.WriteLine("New visitor created.");
         }
-        //Basic Feature 12
+        //Basic Feature 12 Create TraveEntry Record
         static void NewTravelEntry(List<Person> personList, List<SHNFacility> SHNList)
         {
             Console.Write("Enter name: ");
@@ -371,7 +372,7 @@ namespace COVID_Monitoring_System
             p.AddTravelEntry(newEntry);
             Console.WriteLine("Travel entry added. Welcome to Singapore!");
         }
-        //Basic feature 13
+        //Basic feature 13 Calculate SHN Charges
         static void CalculateSHNCharges(List<Person> personList)
         {
             
@@ -402,7 +403,7 @@ namespace COVID_Monitoring_System
                 Console.WriteLine("{0} has no unpaid travel entries!", name);
             }
         }
-        //Advanced Feature 1
+        //Advanced Feature 1 Contact Tracing Reporting 
         static void ContactTracingReport(List<Person> personList, List<BusinessLocation> bizList)
         {
             Console.Write("Enter Buiness Location: ");
@@ -438,7 +439,7 @@ namespace COVID_Monitoring_System
             }
         }
 
-        //Advanced Feature 2
+        //Advanced Feature 2 SHN Status Reporting 
         static void SHNStatusReport(List<Person> personList)
         {
             Console.Write("Enter date: ");
@@ -464,7 +465,7 @@ namespace COVID_Monitoring_System
                 }
             }
         }
-        static int ValidOption()
+        static int ValidOption() //Check if the option entered is valid 
         {
             int option = 256;
             bool invalid = true;
@@ -488,7 +489,7 @@ namespace COVID_Monitoring_System
             }
             return option;
         }
-        static DateTime ValidDate(string dateType)
+        static DateTime ValidDate(string dateType) //check if datetime entered is valid
         {
             Console.Write("Enter {0}: ",dateType);
             string date = Console.ReadLine();
@@ -503,7 +504,7 @@ namespace COVID_Monitoring_System
             return parsedDate;
         }
 
-        static bool InitBussinessLocation(List<BusinessLocation> bizList, string name)
+        static bool InitBussinessLocation(List<BusinessLocation> bizList, string name) // Initialize business location 
         {
             foreach (BusinessLocation b in bizList)
             {
@@ -514,7 +515,7 @@ namespace COVID_Monitoring_System
             }
             return false;
         }
-        static SHNFacility InitSHNFacility(List<SHNFacility> SHNList, string name)
+        static SHNFacility InitSHNFacility(List<SHNFacility> SHNList, string name)// initialize SHN facility
         {
             foreach (SHNFacility s in SHNList)
             {
@@ -526,7 +527,7 @@ namespace COVID_Monitoring_System
             }
             return new SHNFacility();
         }
-        static Person InitPerson(List<Person> personList, string name)
+        static Person InitPerson(List<Person> personList, string name) // initialize person list 
         {
             foreach (Person p in personList)
             {
@@ -538,7 +539,7 @@ namespace COVID_Monitoring_System
             }
             return new Resident();
         }
-        static void Main(string[] args)
+        static void Main(string[] args) // main program 
         {
             List<Person> personList = new List<Person>();
             List<Visitor> visitorList = new List<Visitor>();
