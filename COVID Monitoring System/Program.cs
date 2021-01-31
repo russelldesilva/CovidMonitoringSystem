@@ -459,19 +459,21 @@ namespace COVID_Monitoring_System
             static void SHNStatusReport(List<Person> personList)
             {
                 DateTime parsedDate = ValidDate("date");
-                using (StreamWriter sw = new StreamWriter("SHNStatus.csv", false))
-                    foreach (Person p in personList)
+            using (StreamWriter sw = new StreamWriter("SHNStatus.csv", false))
+            {
+                foreach (Person p in personList)
+                {
+                    foreach (TravelEntry t in p.TravelEntryList)
                     {
-                        foreach (TravelEntry t in p.TravelEntryList)
+                        if (t.SHNEndDate.CompareTo(parsedDate) >= 0)
                         {
-                            if (t.SHNEndDate.CompareTo(parsedDate) >= 0)
-                            {
-                                string[] SHNStatusData = { p.Name, t.SHNStay.FacilityName, t.SHNEndDate.ToString() };
-                                sw.WriteLine("{0},{1},{2}", SHNStatusData[0], SHNStatusData[1], SHNStatusData[2]);
-                            }
+                            string[] SHNStatusData = { p.Name, t.SHNStay.FacilityName, t.SHNEndDate.ToString() };
+                            sw.WriteLine("{0},{1},{2}", SHNStatusData[0], SHNStatusData[1], SHNStatusData[2]);
                         }
                     }
-                Console.WriteLine("Report generated!\n");
+                }
+            }
+            Console.WriteLine("Report generated!\n");
             }
             static int ValidOption()
             {
